@@ -39,63 +39,11 @@
             font-family: 'Istok Web', sans-serif;
         }
 
-        .welcome-container {
-            position: absolute;
-            top: 30%;
-            left: 80px;
-            transform: translateY(-50%);
-            z-index: 2;
-            font-family: 'Istok Web', sans-serif;
-            color: #f0f0f0;
-        }
-
-        .welcome-text {
-            position: absolute;
-            top: 50%;
-            left: 15px;
-            transform: translateY(-50%);
-            font-size: 75px;
-            color: #f0f0f0;
-            margin: 20px;
-            z-index: 2;
-            font-family: 'Istok Web', sans-serif;
-            white-space: nowrap;
-        }
-
-        .description {
-            font-size: 20px;
-            margin: 0;
-            max-width: 550px;
-            margin-top: 350px;
-            margin-left: 40px;
-            font-family: 'Istok Web', sans-serif;
-        }
-
-        .read-more-button {
-            position: absolute;
-            bottom: 160px;
-            left: 120px;
-            padding: 10px 40px;
-            background-color: #f0f0f0;
-            color: #000522;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 16px;
-            font-family: 'Istok Web', sans-serif;
-            text-decoration: none;
-        }
-
-        .read-more-button:hover {
-            background-color: #0056b3;
-            color: #f0f0f0;
-        }
-
         .login-container {
             position: absolute;
             top: 50%;
-            right: 120px;
-            transform: translateY(-50%);
+            left: 50%; /* Center the container */
+            transform: translate(-50%, -50%); /* Center it vertically and horizontally */
             width: 400px;
             padding: 20px;
             background-color: #fff;
@@ -121,6 +69,7 @@
             width: 100%;
             max-width: 400px;
             margin-bottom: 20px;
+            margin-left: 40px;
         }
 
         .input-container input {
@@ -188,38 +137,83 @@
 <body>
     <img src="img/CPC LOGO BACKROUND REMOVED.png" alt="logo" class="logo">
     <div class="cpc-text">COLEGIO DE LA PURISIMA CONCEPCION</div>
-    <div class="welcome-container">
-        <div class="welcome-text">WELCOME BACK!</div>
-        <p class="description">At Colegio de la Purisima Concepcion, we're committed to enhancing campus security and streamlining access control. Our innovative QR Code Verification System is designed to revolutionize how we manage vehicle access to school grounds, making the process smoother and more efficient for everyone involved.</p>
-    </div>
-    <a href="your-link-here.html" class="read-more-button">Read More</a>
 
     <div class="login-container">
         <img src="img/QR CODE VERIFICATION SYSTEM LOGO.png" alt="Login Form Image">
-        <form action="login-handler.php" method="post">
-            <div class="input-container">
-                <i class="fas fa-user"></i>
-                <input type="text" id="username" name="username" placeholder="Username" required>
-            </div>
-            <div class="input-container">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="password" name="password" placeholder="Password" required>
-                <i class="fas fa-eye view-password" id="togglePassword"></i>
-            </div>
-            <a href="forgot-password.php" class="forgot-password">Forgot Password?</a>
-            <button type="submit">LOGIN</button>
-        </form>
+        <div class="input-container">
+            <i class="fas fa-user"></i>
+            <input type="text" id="username" name="username" placeholder="Username" required>
+        </div>
+        <div class="input-container">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <i class="fas fa-eye view-password" id="togglePassword"></i>
+        </div>
+        <a href="forgot-password.php" class="forgot-password">Forgot Password?</a>
+        <button type="button" onclick="checkLogin()">LOGIN</button>
     </div>
 
     <script>
-        const togglePassword = document.querySelector('#togglePassword');
-        const password = document.querySelector('#password');
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    const username = document.getElementById('username');
 
-        togglePassword.addEventListener('click', function () {
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            this.classList.toggle('fa-eye-slash');
+    togglePassword.addEventListener('click', function () {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.classList.toggle('fa-eye-slash');
+    });
+
+    function checkLogin() {
+        event.preventDefault();
+
+        const validUsername = "admin";
+        const validPassword = "password";
+
+        // Get the input values
+        const usernameValue = username.value;
+        const passwordValue = password.value;
+
+        // Simple client-side validation (ensure both fields are filled)
+        if (usernameValue === "" || passwordValue === "") {
+            alert("Please fill out both fields.");
+            return;
+        }
+
+        // Proceed to submit the data via AJAX (fetch API)
+        fetch('dashboard.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `username=${encodeURIComponent(usernameValue)}&password=${encodeURIComponent(passwordValue)}`
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (usernameValue === validUsername && passwordValue === validPassword) {
+                window.location.href = "dashboard.php";
+            } else {
+                alert("Invalid login credentials. Please try again.");
+            }
+        })
+        .catch(error => {
+            console.error('Error during login:', error);
         });
-    </script>
+    }
+
+    // Add event listener to handle Enter key press
+    username.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            checkLogin();
+        }
+    });
+
+    password.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            checkLogin();
+        }
+    });
+</script>
+
 </body>
 </html>

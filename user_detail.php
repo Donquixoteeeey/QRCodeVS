@@ -4,7 +4,7 @@ include 'db_connect.php';
 $userId = $_GET['id'] ?? '';
 
 if ($userId) {
-    $sql = "SELECT id, name, vehicle, plate_number, contact_number FROM user_info WHERE id = ?";
+    $sql = "SELECT id, name, vehicle, plate_number, contact_number, qr_code_url FROM user_info WHERE id = ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bind_param('i', $userId);
@@ -32,6 +32,7 @@ if ($userId) {
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Istok+Web&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -82,7 +83,7 @@ if ($userId) {
 
         .content {
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: flex-start;
         }
 
@@ -106,6 +107,25 @@ if ($userId) {
             margin: 0;
             color: #666;
         }
+
+        .qr-code {
+            margin-left: 20px;
+            text-align: center;
+        }
+
+        .qr-code img {
+            width: 150px; /* Adjust size as needed */
+            height: 150px; /* Adjust size as needed */
+            margin-right: 20px;
+        }
+
+        .qr-code h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px; /* Adjust font size as needed */
+            margin-top: 10px; /* Add some space above the text */
+            color: #2a3d6b; /* Adjust text color if needed */
+            margin-right: 20px;
+        }
     </style>
 </head>
 <body>
@@ -124,6 +144,15 @@ if ($userId) {
                     <dt>Contact Number:</dt>
                     <dd><?php echo htmlspecialchars($user['contact_number']); ?></dd>
                 </dl>
+            </div>
+
+            <div class="qr-code">
+                <?php if (!empty($user['qr_code_url'])): ?>
+                    <img src="<?php echo htmlspecialchars($user['qr_code_url']); ?>" alt="QR Code">
+                    <h2>Generated QR Code</h2>
+                <?php else: ?>
+                    <h2>No QR Code generated for this user.</h2>
+                <?php endif; ?>
             </div>
         </div>
     </div>

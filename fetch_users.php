@@ -1,20 +1,17 @@
 <?php
-// fetch_users.php
+
 $servername = "localhost";
 $username = "admin";
 $password = "your_password";
 $dbname = "qr_code_management";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch user details including vehicle and plate number
-$sql = "SELECT id, name, vehicle, plate_number FROM user_info"; // Adjust as per your table structure
+$sql = "SELECT id, name, vehicle, plate_number FROM user_info"; 
 $result = $conn->query($sql);
 
 $users = [];
@@ -26,5 +23,5 @@ if ($result->num_rows > 0) {
 
 $conn->close();
 
-echo json_encode($users); // Send user data as JSON
+echo json_encode($users); 
 ?>
