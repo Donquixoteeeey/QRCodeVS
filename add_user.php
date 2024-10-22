@@ -59,7 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add User</title>
@@ -67,7 +69,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f4f4f4;
@@ -155,9 +159,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .btn + .btn:hover {
             background-color: #5a6268;
         }
+
     </style>
+
 </head>
+
 <body>
+
     <div class="form-container">
         <h2>Add User</h2>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
@@ -187,5 +195,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </form>
     </div>
+
 </body>
+
 </html>

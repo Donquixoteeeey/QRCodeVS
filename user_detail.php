@@ -25,7 +25,9 @@ if ($userId) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Details</title>
@@ -34,7 +36,9 @@ if ($userId) {
     <link href="https://fonts.googleapis.com/css2?family=Istok+Web&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
+
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -114,21 +118,48 @@ if ($userId) {
         }
 
         .qr-code img {
-            width: 150px; /* Adjust size as needed */
-            height: 150px; /* Adjust size as needed */
+            width: 150px; 
+            height: 150px; 
             margin-right: 20px;
         }
 
         .qr-code h2 {
             font-family: 'Inter', sans-serif;
-            font-size: 16px; /* Adjust font size as needed */
-            margin-top: 10px; /* Add some space above the text */
-            color: #2a3d6b; /* Adjust text color if needed */
+            font-size: 16px; 
+            margin-top: 10px; 
+            color: #2a3d6b; 
             margin-right: 20px;
         }
+
+        .button-container {
+            display: flex; 
+            justify-content: center; 
+            margin-top: 10px; 
+        }
+        
+        .action-button {
+            padding: 10px 20px;
+            margin: 0 10px; 
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            width: 110px;
+        }
+        
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+
     </style>
+
 </head>
+
 <body>
+
     <div class="container">
         <a href="user_info.php" class="back-button"><i class="fas fa-arrow-left"></i> Back to User Information</a>
         <h1>User Details</h1>
@@ -148,13 +179,61 @@ if ($userId) {
 
             <div class="qr-code">
                 <?php if (!empty($user['qr_code_url'])): ?>
-                    <img src="<?php echo htmlspecialchars($user['qr_code_url']); ?>" alt="QR Code">
+                    <img src="<?php echo htmlspecialchars($user['qr_code_url']); ?>" alt="QR Code" id="qrCodeImage">
                     <h2>Generated QR Code</h2>
-                <?php else: ?>
-                    <h2>No QR Code generated for this user.</h2>
-                <?php endif; ?>
+                    <div class="button-container">
+                        <button onclick="printQRCode()" class="action-button">Print</button>
+                        <button onclick="downloadQRCode()" class="action-button">Download</button>
+                    </div>
+                    <?php else: ?>
+                        <h2>No QR Code generated for this user.</h2>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+
+<script>
+
+    function printQRCode() {
+        const qrCodeImage = document.getElementById('qrCodeImage').src;
+        const printWindow = window.open('', '', 'width=600,height=400');
+        printWindow.document.write('<html><head><title>Print QR Code</title>');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write('<h2>Generated QR Code</h2>');
+        printWindow.document.write('<img src="' + qrCodeImage + '" alt="QR Code">');
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    }
+
+    function downloadQRCode() {
+        const qrCodeImage = document.getElementById('qrCodeImage').src;
+        const userName = "<?php echo htmlspecialchars($user['name']); ?>"; 
+        const sanitizedUserName = userName.replace(/\s+/g, '_').replace(/[^\w\-]/g, ''); 
+
+        const canvas = document.createElement('canvas');
+        const img = new Image();
+        img.crossOrigin = 'anonymous'; 
+        img.src = qrCodeImage;
+
+        img.onload = function() {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+
+            canvas.toBlob(function(blob) {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `${sanitizedUserName}_qr_code.png`; 
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }, 'image/png');
+        };
+    }
+</script>
+
 </body>
+
 </html>

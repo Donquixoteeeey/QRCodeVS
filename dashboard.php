@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
@@ -8,7 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
+
         body {
             margin: 0;
             font-family: 'Istok Web', sans-serif;
@@ -31,7 +35,7 @@
             left: 0;
             top: 0;
             bottom: 0;
-            transition: transform 0.3s ease-in-out, width 0.3s ease-in-out; /* Added width transition */
+            transition: transform 0.3s ease-in-out, width 0.3s ease-in-out; 
             font-family: 'Inter', sans-serif;
             
         }
@@ -67,7 +71,7 @@
         .sidebar a:hover {
             background-color: #0056b3;
             color: #f0f0f0;
-            transform: scale(1.10); /* Slightly increase size on hover */
+            transform: scale(1.10);
         }
 
         .sidebar .highlighted {
@@ -105,12 +109,12 @@
             flex: 1;
             padding: 20px;
             transition: margin-left 0.3s;
-            margin-left: 310px; /* Adjust this based on sidebar width */
+            margin-left: 310px; 
             margin-top: 75px;
         }
 
         .collapsed .main-content {
-            margin-left: 20px; /* Adjust for space when sidebar is collapsed */
+            margin-left: 20px;
         }
 
         .dashboard-title {
@@ -140,7 +144,7 @@
         }
 
         .logo-container img {
-            width: 200px; /* Adjust logo size here */
+            width: 200px; 
             height: auto;
         }
 
@@ -178,7 +182,7 @@
             }
 
             .collapsed .main-content {
-                margin-left: 80px; /* Adjust for mobile */
+                margin-left: 80px; 
             }
         }
 
@@ -192,7 +196,7 @@
             }
 
             .collapsed .main-content {
-                margin-left: 80px; /* Adjust for mobile */
+                margin-left: 80px; 
             }
         }
 
@@ -245,119 +249,116 @@
         }
     
         .dashboard-cards {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-    gap: 20px; /* This will add space between the cards */
-}
-
-.card {
-    background-color: #ECECEC;
-    border-radius: 15px;
-    padding: 20px;
-    width: 30%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: transform 0.2s ease-in-out;
-    margin-bottom: 20px; /* Optional: adds space below the card */
-}
-
-
-    .card:hover {
-        transform: translateY(-10px);
-    }
-
-    .card-icon {
-        font-size: 25px;
-        color: #2C2B6D;
-        margin-bottom: 28px;
-    }
-
-    .card-content h3 {
-        font-family: 'Comfortaa', cursive;
-        font-size: 18px;
-        color: #2C2B6D;
-        margin: 0;
-        margin-left: 10px;
-    }
-
-    .card-content p {
-        font-size: 24px;
-        font-weight: bold;
-        color: #000522;
-        margin: 0;
-        margin-top: 10px;
-        margin-left: 10px;
-    }
-
-    @media (max-width: 768px) {
-        .dashboard-cards {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 20px; 
+        }
+        
+        .card {
+            background-color: #ECECEC;
+            border-radius: 15px;
+            padding: 20px;
+            width: 30%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.2s ease-in-out;
+            margin-bottom: 20px; 
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .card-icon {
+            font-size: 25px;
+            color: #2C2B6D;
+            margin-bottom: 28px;
+        }
+        
+        .card-content h3 {
+            font-family: 'Comfortaa', cursive;
+            font-size: 18px;
+            color: #2C2B6D;
+            margin: 0;
+            margin-left: 10px;
+        }
+        
+        .card-content p {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000522;
+            margin: 0;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-cards {
             flex-direction: column;
             align-items: center;
         }
 
-       
     }
+    
     .tables-container {
-    display: flex; /* Enables flexbox layout */
-    justify-content: space-between; /* Space between the two tables */
-    width: 100%; /* Full width of the parent container */
-    font-family: 'Inter', sans-serif; 
-}
-
-.table-container {
-    width: 45%; /* Each table container occupies 48% of the width */
-    margin-top: 10px; /* Space above the containers */
-    background-color: #fff; /* Background color for the container */
-    border-radius: 15px; /* Rounded corners */
-    padding: 20px; /* Padding inside the container */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Shadow effect */
-    margin-bottom: 20px;
-}
-
-.table-container h2 {
-    font-family: 'Comfortaa', cursive; /* Consistent font */
-    color: #2C2B6D; /* Heading color */
-    margin-bottom: 20px; /* Space below the heading */
-    margin-top: 10px;
-    font-size: 22px; /* Larger font size for the heading */
-}
-
-/* Reuse the existing styles for the table */
-.user-details-table,
-.previously-scanned-table {
-    width: 100%; /* Full width of the container */
-    border-collapse: collapse; /* Collapses borders */
-}
-
-.user-details-table th,
-.user-details-table td,
-.previously-scanned-table th,
-.previously-scanned-table td {
-    padding: 15px; /* Padding for table cells */
-    text-align: left; /* Align text to the left */
-    border-bottom: 1px solid #ddd; /* Light bottom border for rows */
-    border-top-left-radius: 10px; /* Rounded corners on the top left */
-    border-top-right-radius: 10px; /* Rounded corners on the top right */
-}
-
-.user-details-table th,
-.previously-scanned-table th {
-    background-color: #2C2B6D; /* Light grey background for headers */
-    font-weight: bold; /* Bold text for headers */
-    color: #f1f1f1; /* Darker color for header text */
-    font-size: 15px;
-}
-
-
-
-
+        display: flex; 
+        justify-content: space-between; 
+        width: 100%; 
+        font-family: 'Inter', sans-serif; 
+    }
+    
+    .table-container {
+        width: 45%; 
+        margin-top: 10px; 
+        background-color: #fff; 
+        border-radius: 15px; 
+        padding: 20px; 
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+        margin-bottom: 20px;
+    }
+    
+    .table-container h2 {
+        font-family: 'Comfortaa', cursive; 
+        color: #2C2B6D; 
+        margin-bottom: 20px; 
+        margin-top: 10px;
+        font-size: 22px; 
+    }
+    
+    .user-details-table,
+    .previously-scanned-table {
+        width: 100%; 
+        border-collapse: collapse; 
+    }
+    
+    .user-details-table th,
+    .user-details-table td,
+    .previously-scanned-table th,
+    .previously-scanned-table td {
+        padding: 10px; 
+        text-align: left; 
+        border-bottom: 1px solid #ddd; 
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px; 
+    }
+    
+    .user-details-table th,
+    .previously-scanned-table th {
+        background-color: #2C2B6D; 
+        font-weight: bold; 
+        color: #f1f1f1;
+        font-size: 15px;
+    }
 
     </style>
+
 </head>
+
 <body>
+
     <button class="toggle-btn" onclick="toggleSidebar()">&#9776;</button>
     
     <div class="sidebar">
@@ -386,38 +387,35 @@
     <div class="date-display"></div>
 
     <div class="dashboard-cards">
-    <!-- Card for Registered Users -->
+   
     <div class="card">
         <div class="card-icon"><i class="fas fa-users"></i></div>
         <div class="card-content">
             <h3>Registered Users</h3>
-            <p id="total-users">Loading...</p> <!-- This will be updated dynamically -->
+            <p id="total-users">Loading...</p> 
         </div>
     </div>
 
-    <!-- New card for New Users This Week -->
     <div class="card">
-        <div class="card-icon"><i class="fas fa-user-plus"></i></div> <!-- New icon -->
+        <div class="card-icon"><i class="fas fa-user-plus"></i></div> 
         <div class="card-content">
             <h3>New Users</h3>
-            <p id="new-users-weekly">Loading...</p> <!-- This will be updated dynamically -->
+            <p id="new-users-weekly">Loading...</p> 
         </div>
     </div>
 
-    <!-- Card for Scanned Today -->
-    <!-- Card for Total Scans Today -->
 <div class="card">
-    <div class="card-icon"><i class="fas fa-qrcode"></i></div> <!-- Use an icon for scans -->
+    <div class="card-icon"><i class="fas fa-qrcode"></i></div> 
     <div class="card-content">
         <h3>Total Scans Today</h3>
-        <p id="totalScansToday">0</p> <!-- This will be updated dynamically -->
+        <p id="totalScansToday">Loading...</p> 
     </div>
 </div>
     </div>
 
     <div class="tables-container">
     <div class="table-container">
-        <h2>New Users</h2> <!-- New heading for the table -->
+        <h2>New Users</h2> 
         <table class="user-details-table">
             <thead>
                 <tr>
@@ -433,12 +431,12 @@
     </div>
 
     <div class="table-container">
-    <h2>Previously Scanned</h2> <!-- New heading for the table -->
+    <h2>Previously Scanned</h2> 
     <table class="previously-scanned-table">
         <thead>
             <tr>
-                <th>QR Code Details</th>
-                <th>Time</th>
+                <th>User ID</th>
+                <th>Date/Time</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -451,19 +449,39 @@
 </div>
 
 
+<script>
 
-    <script>
-
-        
 document.addEventListener('DOMContentLoaded', function() {
-    // Fetch new users from the PHP script
-    fetch('get_new_users.php') // Adjust path if necessary
+    fetch('get_recent_scans.php')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);  
+
+            const previouslyScannedBody = document.getElementById('previously-scanned-body');
+            previouslyScannedBody.innerHTML = '';
+
+            data.forEach(scan => {
+                const row = document.createElement('tr');
+                const time = new Date(scan.time_timestamp).toLocaleString(); 
+                
+                row.innerHTML = `
+                    <td>${scan.user_id}</td>
+                    <td>${time}</td>
+                    <td>${scan.action_type}</td>
+                `;
+                previouslyScannedBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching recent scans:', error));
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('get_new_users.php') 
         .then(response => response.json())
         .then(data => {
             const userDetailsBody = document.getElementById('user-details-body');
-            userDetailsBody.innerHTML = ''; // Clear existing rows
+            userDetailsBody.innerHTML = ''; 
 
-            // Loop through each user and create a new row
             data.forEach(user => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -495,12 +513,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+           const dateDisplay = document.querySelector('.date-display'); const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; 
+           const today = new Date(); dateDisplay.textContent = today.toLocaleDateString('en-US', options); })
            
-const dateDisplay = document.querySelector('.date-display'); const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; 
-const today = new Date(); dateDisplay.textContent = today.toLocaleDateString('en-US', options); })
-
-    document.addEventListener('DOMContentLoaded', function() {
-        fetch('get_total_users.php') // Replace with the actual path to your PHP file
+           document.addEventListener('DOMContentLoaded', function() {
+            fetch('get_total_users.php') 
             .then(response => response.text())
             .then(data => {
                 document.querySelector('#total-users').textContent = data;
@@ -508,30 +525,23 @@ const today = new Date(); dateDisplay.textContent = today.toLocaleDateString('en
             .catch(error => console.error('Error:', error));
     });
 
-    fetch('get_new_users_weekly.php')  // Path to your new PHP file
+    fetch('get_new_users_weekly.php')  
     .then(response => response.text())
     .then(data => {
         document.getElementById('new-users-weekly').textContent = data;
     })
     .catch(error => console.error('Error fetching new users:', error));
-
-    function fetchTotalScansToday() {
-    fetch('get_total_scans.php') // Assuming you created this PHP file
+    
+    fetch('get_total_scans.php')
     .then(response => response.json())
     .then(data => {
-        const totalScansToday = data.totalScansToday;
-        document.getElementById('totalScansToday').textContent = totalScansToday;
-
+        const totalScansTodayElement = document.getElementById('totalScansToday');
+        totalScansTodayElement.textContent = data.total_scans_today;
     })
-    .catch(error => console.error('Error fetching total scans:', error));
-}
+    .catch(error => console.error('Error fetching total scans today:', error));
 
-// Call this function when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    fetchTotalScansToday();
-});
+</script>
 
-
-    </script>
 </body>
+
 </html>

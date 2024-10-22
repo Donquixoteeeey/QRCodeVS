@@ -16,7 +16,9 @@ $result = $stmt->get_result();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
@@ -26,7 +28,9 @@ $result = $stmt->get_result();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
+
         $(document).ready(function(){
             function loadUserData(searchTerm = '') {
                 $.ajax({
@@ -46,9 +50,11 @@ $result = $stmt->get_result();
                 loadUserData(searchTerm);
             });
         });
+
     </script>
 
     <style>
+
         body {
             margin: 0;
             font-family: 'Istok Web', sans-serif;
@@ -73,7 +79,7 @@ $result = $stmt->get_result();
             bottom: 0;
             transition: transform 0.3s ease-in-out;
             font-family: 'Inter', sans-serif;
-            z-index: 1000; /* Ensure the sidebar is above other elements */
+            z-index: 1000; 
         }
 
         .collapsed .sidebar {
@@ -145,12 +151,12 @@ $result = $stmt->get_result();
             flex: 1;
             padding: 20px;
             transition: margin-left 0.3s;
-            margin-left: 310px; /* Adjust this based on sidebar width */
+            margin-left: 310px; 
             margin-top: 75px;
         }
 
         .collapsed .main-content {
-            margin-left: 20px; /* Adjust for space when sidebar is collapsed */
+            margin-left: 20px;
         }
 
         .dashboard-title {
@@ -179,7 +185,7 @@ $result = $stmt->get_result();
         }
 
         .logo-container img {
-            width: 200px; /* Adjust logo size here */
+            width: 200px; 
             height: auto;
         }
 
@@ -208,77 +214,77 @@ $result = $stmt->get_result();
         }
 
         .table-container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    margin-top: 30px;
-    height: 550px; /* Set a fixed height */
-    overflow-x: auto; /* Scroll only if necessary */
-    overflow-y: auto; /* Vertical scroll */
-}
-      
-.table-container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    margin-top: 30px;
-    height: 430px; /* Set a fixed height */
-    overflow: hidden; /* Hide overflow */
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'Inter', sans-serif; 
-    margin-top: 10px;
-}
-
-/* General styles for the table header */
-thead th {
-    background-color: #2C2B6D;
-    color: #f1f1f1;
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    border-radius: 0; /* Ensures other columns remain without rounded corners */
-}
-
-/* Rounded corner for the first column's header */
-thead th:first-child {
-    border-top-left-radius: 15px;
-}
-
-/* Rounded corner for the last column's header */
-thead th:last-child {
-    border-top-right-radius: 15px;
-}
-
-
-
-
-tbody {
-    display: block; /* Enable block display */
-    height: calc(550px - 50px); /* Adjust based on the header height */
-    overflow-y: auto; /* Scroll only on the y-axis */
-}
-
-tr {
-    display: table; /* Maintain table layout */
-    table-layout: fixed; /* Equal column widths */
-    width: 100%; /* Use full width */
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    width: 20%; /* Adjust as needed */
-}
-
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            margin-top: 30px;
+            height: 550px; 
+            overflow-x: auto; 
+            overflow-y: auto; 
+        }
+        
+        .table-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            margin-top: 30px;
+            height: 430px; 
+            overflow: hidden; 
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Inter', sans-serif; 
+        }
+        
+        thead th {
+            background-color: #2C2B6D;
+            color: #f1f1f1;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tbody {
+            display: block;
+            height: 320px; 
+            overflow-y: auto; 
+        }
+        
+        tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed; 
+        }
+        
+        td, th {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th, td {
+            width: 20%; 
+        }
+        
+        thead th:first-child {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 0px;
+        }
+        
+        thead th:last-child {
+            border-top-right-radius: 15px;
+            border-top-left-radius: 0px;
+        }
+        
+        thead th:not(:first-child):not(:last-child) {
+            border-radius: 0;
+        }
 
         th {
             background-color: #2C2B6D;
@@ -289,7 +295,6 @@ th, td {
         tr:hover {
             background-color: #f1f1f1;
         }
-
 
         .search-container {
             display: flex;
@@ -389,7 +394,7 @@ th, td {
             }
 
             .collapsed .main-content {
-                margin-left: 80px; /* Adjust for mobile */
+                margin-left: 80px; 
             }
         }
 
@@ -403,7 +408,7 @@ th, td {
             }
 
             .collapsed .main-content {
-                margin-left: 80px; /* Adjust for mobile */
+                margin-left: 80px; 
             }
         }
 
@@ -455,10 +460,12 @@ th, td {
             display: block;
         }
     
-        
     </style>
+
 </head>
+
 <body>
+
     <button class="toggle-btn" onclick="toggleSidebar()">&#9776;</button>
     
     <div class="sidebar">
@@ -520,9 +527,9 @@ th, td {
     </table>
 </div>
 
+<script>
 
-    <script>
-          function toggleSidebar() {
+        function toggleSidebar() {
             document.body.classList.toggle('collapsed');
         }
 
@@ -541,9 +548,11 @@ th, td {
 
         document.addEventListener('DOMContentLoaded', () => {
            
-const dateDisplay = document.querySelector('.date-display'); const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; 
-const today = new Date(); dateDisplay.textContent = today.toLocaleDateString('en-US', options); })
+            const dateDisplay = document.querySelector('.date-display'); const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; 
+            const today = new Date(); dateDisplay.textContent = today.toLocaleDateString('en-US', options); })
 
     </script>
+    
 </body>
+
 </html>

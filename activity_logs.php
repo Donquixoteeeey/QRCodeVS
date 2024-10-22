@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
@@ -8,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         body {
             margin: 0;
@@ -104,12 +107,12 @@
             flex: 1;
             padding: 20px;
             transition: margin-left 0.3s;
-            margin-left: 310px; /* Adjust this based on sidebar width */
+            margin-left: 310px;
             margin-top: 75px;
         }
 
         .collapsed .main-content {
-            margin-left: 20px; /* Adjust for space when sidebar is collapsed */
+            margin-left: 20px; 
         }
 
         .dashboard-title {
@@ -138,7 +141,7 @@
         }
 
         .logo-container img {
-            width: 200px; /* Adjust logo size here */
+            width: 200px; 
             height: auto;
         }
 
@@ -186,24 +189,22 @@
 
         .scan-button {
             background: linear-gradient(135deg, #4a90e2, #50e3c2);
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-   
-    border-radius: 25px;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s, box-shadow 0.3s;
-    width: 250px;
-    font-family: 'Inter', sans-serif; 
-}
-
-.scan-button:hover {
-    background: linear-gradient(135deg, #50e3c2, #4a90e2);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, box-shadow 0.3s;
+            width: 250px;
+            font-family: 'Inter', sans-serif; 
+        }
+        
+        .scan-button:hover {
+            background: linear-gradient(135deg, #50e3c2, #4a90e2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
 
         .video-container {
             position: relative;
@@ -211,16 +212,14 @@
             height: 400px;
             display: none; 
             margin-top: 20px;
-            overflow: hidden; /* Add this line */
-
+            overflow: hidden; 
         }
 
         .video-container video {
             width: 500px;
             height: 100%;
-            border-radius: 15px; /* Ensure this line is present */
-    object-fit: cover; /* This can help maintain aspect ratio */
-
+            border-radius: 15px; 
+            object-fit: cover; 
         }
 
         .output {
@@ -241,28 +240,23 @@
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-
-       /* General styles for the table header */
-thead th {
-    background-color: #2C2B6D;
-    color: #f1f1f1;
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-/* Rounded corner for the first column's header */
-thead th:first-child {
-    border-top-left-radius: 15px;
-}
-
-/* Rounded corner for the last column's header */
-thead th:last-child {
-    border-top-right-radius: 15px;
-}
-
-
         
+        thead th {
+            background-color: #2C2B6D;
+            color: #f1f1f1;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        thead th:first-child {
+            border-top-left-radius: 15px;
+        }
+        
+        thead th:last-child {
+            border-top-right-radius: 15px;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 250px;
@@ -273,7 +267,7 @@ thead th:last-child {
             }
 
             .collapsed .main-content {
-                margin-left: 80px; /* Adjust for mobile */
+                margin-left: 80px;
             }
         }
 
@@ -287,7 +281,7 @@ thead th:last-child {
             }
 
             .collapsed .main-content {
-                margin-left: 80px; /* Adjust for mobile */
+                margin-left: 80px; 
             }
         }
 
@@ -341,8 +335,11 @@ thead th:last-child {
     
         
     </style>
+
 </head>
+
 <body>
+
     <button class="toggle-btn" onclick="toggleSidebar()">&#9776;</button>
     
     <div class="sidebar">
@@ -377,24 +374,27 @@ thead th:last-child {
                 <video id="video" autoplay></video>
             </div>
             <div class="output" id="output"></div>
-            <table id="timeLogTable">
-                <thead>
-                    <tr>
-                        <th>User Information</th>
-                        <th>Time In</th>
-                        <th>Time Out</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Logged time entries will be added here dynamically -->
-                </tbody>
-            </table>
+           <table id="timeLogTable">
+    <thead>
+        <tr>
+            <th>User Information</th>
+            <th>Vehicle</th>
+            <th>Plate Number</th>
+            <th>Time In</th>
+            <th>Time Out</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Logged time entries will be added here dynamically -->
+    </tbody>
+</table>
         </div>
     </div>
 
-    <script src="https://unpkg.com/@zxing/library@latest"></script>
+<script src="https://unpkg.com/@zxing/library@latest"></script>
 
-    <script>
+<script>
+
     function toggleSidebar() {
         document.body.classList.toggle('collapsed');
     }
@@ -420,7 +420,7 @@ thead th:last-child {
     });
 
     const timeLogs = {};
-    let isProcessing = false; // Flag to prevent multiple scans
+    let isProcessing = false; 
 
     const scanButton = document.getElementById('scanButton');
     const videoContainer = document.getElementById('videoContainer');
@@ -430,27 +430,26 @@ thead th:last-child {
     scanButton.addEventListener('click', startCamera);
 
     function startCamera() {
-    // Ask the user for permission to use the camera
+   
     const userConfirmed = confirm("Do you want to use the camera for QR code scanning?");
     if (!userConfirmed) {
         output.textContent = "Camera access denied. Please allow camera access to scan QR codes.";
-        return; // Exit the function if the user declines
+        return; 
     }
 
     videoContainer.style.display = 'block'; 
     const codeReader = new ZXing.BrowserQRCodeReader();
 
-    // Mobile-friendly media constraints, prioritizing the rear camera if available
+  
     const constraints = {
         video: {
-            facingMode: "environment" // Use the rear camera on mobile devices if available
+            facingMode: "environment" 
         }
     };
 
-    // Start scanning for QR codes from the video stream
     codeReader.decodeFromVideoDevice(null, 'video', (result, err) => {
         if (result) {
-            logTime(result.text);  // Process the scanned QR code
+            logTime(result.text); 
         } else if (err && err.name === 'NotAllowedError') {
             output.textContent = "Camera access denied. Please enable camera access in your browser settings.";
         } else if (err) {
@@ -460,71 +459,87 @@ thead th:last-child {
 }
 
 
-    function logTime(userId) {
-        if (isProcessing) return; // Exit if already processing
-        isProcessing = true; // Set the flag
+function logTime(qrCodeText) {
+    if (isProcessing) return; 
+    isProcessing = true; 
 
-        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    fetch('validate_qr_code.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ qr_code_text: qrCodeText })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const userId = data.user.id;
+            const userName = data.user.name;
+            const vehicle = data.user.vehicle;
+            const plateNumber = data.user.plate_number;
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-        // Initialize the user's log array if it doesn't exist
-        if (!timeLogs[userId]) {
-            timeLogs[userId] = [];
-        }
-
-        // Check if the last log for this user is a time-in
-        const lastLog = timeLogs[userId][timeLogs[userId].length - 1];
-
-        if (!lastLog || lastLog.timeOut) {
-            // Log time-in
-            const newLog = { timeIn: currentTime, timeOut: null };
-            timeLogs[userId].push(newLog);
-
-            const newRow = timeLogTable.insertRow();
-            newRow.insertCell(0).textContent = userId;         
-            newRow.insertCell(1).textContent = currentTime;     
-            newRow.insertCell(2).textContent = "Not yet logged out"; 
-
-            // Send time-in data to the server
-            fetch('store_time.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userId, timeIn: currentTime })
-            });
-
-            output.textContent = `User ${userId} logged in at ${currentTime}`;
-        } else {
-            // User is logged in, proceed to log time-out
-            if (lastLog && lastLog.timeOut === null) { 
-                lastLog.timeOut = currentTime;
-
-                const rows = timeLogTable.getElementsByTagName('tr');
-                for (let i = 0; i < rows.length; i++) {
-                    if (rows[i].cells[0].textContent === userId && rows[i].cells[2].textContent === "Not yet logged out") {
-                        rows[i].cells[2].textContent = lastLog.timeOut; 
-                        
-                        // Send time-out data to the server
-                        fetch('store_time.php', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ userId: userId, timeOut: currentTime })
-                        });
-
-                        output.textContent = `User ${userId} logged out at ${currentTime}`;
-                        break; 
-                    }
-                }
-            } else {
-                // User has already logged out or has no logged in record
-                output.textContent = `User ${userId} has already logged out at ${lastLog.timeOut}`;
+            if (!timeLogs[userId]) {
+                timeLogs[userId] = [];
             }
-        }
 
-        // Introduce a delay before allowing the next scan
-        setTimeout(() => {
-            isProcessing = false; // Reset the flag after the delay
-        }, 3000); // 3000 milliseconds delay (3 seconds)
-    }
-    
+            const lastLog = timeLogs[userId][timeLogs[userId].length - 1];
+
+            if (!lastLog || lastLog.timeOut) {
+                // Log time-in
+                const newLog = { timeIn: currentTime, timeOut: null };
+                timeLogs[userId].push(newLog);
+
+                const newRow = timeLogTable.insertRow();
+                newRow.insertCell(0).textContent = userName;       
+                newRow.insertCell(1).textContent = vehicle;      
+                newRow.insertCell(2).textContent = plateNumber; 
+                newRow.insertCell(3).textContent = currentTime;  
+                newRow.insertCell(4).textContent = "Not yet logged out"; 
+
+                fetch('store_time.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: userId, timeIn: currentTime })
+                });
+
+                output.textContent = `User ${userName} logged in at ${currentTime}`;
+            } else {
+               
+                if (lastLog && lastLog.timeOut === null) { 
+                    lastLog.timeOut = currentTime;
+
+                    const rows = timeLogTable.getElementsByTagName('tr');
+                    for (let i = 0; i < rows.length; i++) {
+                        if (rows[i].cells[0].textContent === userName && rows[i].cells[4].textContent === "Not yet logged out") {
+                            rows[i].cells[4].textContent = lastLog.timeOut;
+
+                          
+                            fetch('store_time.php', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ userId: userId, timeOut: currentTime })
+                            });
+
+                            output.textContent = `User ${userName} logged out at ${currentTime}`;
+                            break; 
+                        }
+                    }
+                } else {
+                    output.textContent = `User ${userName} has already logged out at ${lastLog.timeOut}`;
+                }
+            }
+        } else {
+            output.textContent = `Invalid QR code. User not found in database.`;
+        }
+    })
+    .catch(error => {
+        console.error('Error validating QR code:', error);
+        output.textContent = 'Error validating QR code. Please try again.';
+    })
+    .finally(() => {
+        setTimeout(() => { isProcessing = false; }, 3000);
+    });
+}
+
     document.addEventListener('DOMContentLoaded', () => {
     fetchLogsFromDatabase();
 
@@ -533,11 +548,11 @@ thead th:last-child {
 });
 
 function fetchLogsFromDatabase() {
-    fetch('fetch_time_logs.php')  // Fetch logs from the PHP file
+    fetch('fetch_time_logs.php')  
         .then(response => response.json())
         .then(logs => {
             const timeLogTable = document.getElementById('timeLogTable').getElementsByTagName('tbody')[0];
-            timeLogTable.innerHTML = '';  // Clear the table before appending new data
+            timeLogTable.innerHTML = '';  
             
             logs.forEach(log => {
                 const newRow = timeLogTable.insertRow();
@@ -548,8 +563,34 @@ function fetchLogsFromDatabase() {
         })
         .catch(error => console.error('Error fetching logs:', error));
 }
-</script>
 
+    document.addEventListener('DOMContentLoaded', () => {
+    fetchLogsFromDatabase();
+
+    const scanButton = document.getElementById('scanButton');
+    scanButton.addEventListener('click', startCamera);
+});
+
+function fetchLogsFromDatabase() {
+    fetch('fetch_time_logs.php')  
+        .then(response => response.json())
+        .then(logs => {
+            const timeLogTable = document.getElementById('timeLogTable').getElementsByTagName('tbody')[0];
+            timeLogTable.innerHTML = ''; 
+            
+            logs.forEach(log => {
+                const newRow = timeLogTable.insertRow();
+                newRow.insertCell(0).textContent = log.user_id;
+                newRow.insertCell(1).textContent = log.time_in;
+                newRow.insertCell(2).textContent = log.time_out ? log.time_out : 'Not yet logged out';
+            });
+        })
+        .catch(error => console.error('Error fetching logs:', error));
+}
+
+
+</script>
     
 </body>
+
 </html>

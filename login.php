@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Verification System - Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Istok+Web&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
+
         body {
             margin: 0;
             overflow: hidden;
@@ -42,8 +46,8 @@
         .login-container {
             position: absolute;
             top: 50%;
-            left: 50%; /* Center the container */
-            transform: translate(-50%, -50%); /* Center it vertically and horizontally */
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 400px;
             padding: 20px;
             background-color: #fff;
@@ -132,9 +136,13 @@
         .forgot-password:hover {
             text-decoration: underline;
         }
+
     </style>
+
 </head>
+
 <body>
+
     <img src="img/CPC LOGO BACKROUND REMOVED.png" alt="logo" class="logo">
     <div class="cpc-text">COLEGIO DE LA PURISIMA CONCEPCION</div>
 
@@ -154,6 +162,7 @@
     </div>
 
     <script>
+
     const togglePassword = document.getElementById('togglePassword');
     const password = document.getElementById('password');
     const username = document.getElementById('username');
@@ -167,41 +176,31 @@
     function checkLogin() {
         event.preventDefault();
 
-        const validUsername = "admin";
-        const validPassword = "password";
+        const validAdmins = [
+            { username: "admin", password: "password", redirect: "dashboard.php" },
+            { username: "admin2", password: "password2", redirect: "phone_activity_logs.php" } 
+        ];
 
         // Get the input values
         const usernameValue = username.value;
         const passwordValue = password.value;
 
-        // Simple client-side validation (ensure both fields are filled)
         if (usernameValue === "" || passwordValue === "") {
             alert("Please fill out both fields.");
             return;
         }
 
-        // Proceed to submit the data via AJAX (fetch API)
-        fetch('dashboard.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `username=${encodeURIComponent(usernameValue)}&password=${encodeURIComponent(passwordValue)}`
-        })
-        .then(response => response.text())
-        .then(data => {
-            if (usernameValue === validUsername && passwordValue === validPassword) {
-                window.location.href = "dashboard.php";
-            } else {
-                alert("Invalid login credentials. Please try again.");
-            }
-        })
-        .catch(error => {
-            console.error('Error during login:', error);
-        });
+        const admin = validAdmins.find(admin => 
+            admin.username === usernameValue && admin.password === passwordValue
+        );
+
+        if (admin) {
+            window.location.href = admin.redirect; 
+        } else {
+            alert("Invalid login credentials. Please try again.");
+        }
     }
 
-    // Add event listener to handle Enter key press
     username.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             checkLogin();
@@ -213,7 +212,8 @@
             checkLogin();
         }
     });
-</script>
+    </script>
 
 </body>
+
 </html>

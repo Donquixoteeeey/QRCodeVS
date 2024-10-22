@@ -1,5 +1,5 @@
 <?php
-// Database connection parameters (same as above)
+
 $servername = "localhost";
 $username = "admin";
 $password = "your_password";

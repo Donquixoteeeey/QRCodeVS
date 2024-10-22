@@ -1,24 +1,28 @@
 <?php
-// Database connection parameters
-$host = "localhost";  // Use $host instead of $servername
-$user = "root";      // Use $user instead of $username
-$pass = "";
-$db = "qr_code_management";
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Could not connect to the database: " . $e->getMessage());
+$servername = "localhost"; 
+$username = "root"; 
+$password = ""; 
+$dbname = "qr_code_management"; 
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Query to get total scans for today using the 'timestamp' column
-$date = date('Y-m-d');
-$stmt = $pdo->prepare("SELECT COUNT(*) AS totalScans FROM user_time_logs WHERE DATE(time_timestamp) = :date");
-$stmt->execute(['date' => $date]);
+$sql = "SELECT COUNT(*) as total_scans FROM user_time_logs WHERE DATE(time_timestamp) = CURDATE()";
+$result = $conn->query($sql);
 
-$totalScans = $stmt->fetch(PDO::FETCH_ASSOC);
+$total_scans = 0; 
 
-// Return the total scans as JSON
-echo json_encode(['totalScansToday' => $totalScans['totalScans']]);
+if ($result->num_rows > 0) {
+    
+    $row = $result->fetch_assoc();
+    $total_scans = $row['total_scans'];
+}
+
+echo json_encode(['total_scans_today' => $total_scans]);
+
+$conn->close();
 ?>

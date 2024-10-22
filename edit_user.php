@@ -34,13 +34,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit User</title>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
     <style>
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f4f4f4;
@@ -110,9 +114,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .btn + .btn:hover {
             background-color: #5a6268;
         }
+
     </style>
+
 </head>
+
 <body>
+
     <div class="container">
         <h2>Edit User Information</h2>
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
@@ -139,5 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </form>
     </div>
+
 </body>
+
 </html>

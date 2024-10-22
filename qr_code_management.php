@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
@@ -8,7 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
+
         body {
             margin: 0;
             font-family: 'Istok Web', sans-serif;
@@ -104,12 +108,12 @@
             flex: 1;
             padding: 20px;
             transition: margin-left 0.3s;
-            margin-left: 310px; /* Adjust this based on sidebar width */
+            margin-left: 310px; 
             margin-top: 75px;
         }
 
         .collapsed .main-content {
-            margin-left: 20px; /* Adjust for space when sidebar is collapsed */
+            margin-left: 20px; 
         }
 
         .dashboard-title {
@@ -138,7 +142,7 @@
         }
 
         .logo-container img {
-            width: 200px; /* Adjust logo size here */
+            width: 200px; 
             height: auto;
         }
 
@@ -176,7 +180,7 @@
             }
 
             .collapsed .main-content {
-                margin-left: 80px; /* Adjust for mobile */
+                margin-left: 80px; 
             }
         }
 
@@ -190,7 +194,7 @@
             }
 
             .collapsed .main-content {
-                margin-left: 80px; /* Adjust for mobile */
+                margin-left: 80px; 
             }
         }
 
@@ -345,39 +349,38 @@
 
 
         .qr-code-form input[type="submit"] {
-    background: linear-gradient(135deg, #4a90e2, #50e3c2);
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    
-    border-radius: 25px;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s, box-shadow 0.3s;
-    width: 250px;
-    margin-top: 20px;
-    font-family: 'Inter', sans-serif; 
-}
-
-.qr-code-form input[type="submit"]:hover {
-    background: linear-gradient(135deg, #50e3c2, #4a90e2);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-.qr-code-form input[type="text"] {
-    width: calc(500px - 22px); 
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 25px;
-    font-size: 16px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
-    margin-right: 15px;
-    font-family: 'Inter', sans-serif; 
-}
-
-.qr-code-result img {
+            background: linear-gradient(135deg, #4a90e2, #50e3c2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, box-shadow 0.3s;
+            width: 250px;
+            margin-top: 20px;
+            font-family: 'Inter', sans-serif; 
+        }
+        
+        .qr-code-form input[type="submit"]:hover {
+            background: linear-gradient(135deg, #50e3c2, #4a90e2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .qr-code-form input[type="text"] {
+            width: calc(500px - 22px); 
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            margin-right: 15px;
+            font-family: 'Inter', sans-serif; 
+        }
+        
+        .qr-code-result img {
             margin-top: 20px;
             width: 150px;
             height: 150px;
@@ -410,12 +413,16 @@
 
         .separator-m {
             margin-top: 20px;
-  border-top: 0.5px solid #ccc; 
-  margin: 30px 20px; 
-}
+            border-top: 0.5px solid #ccc; 
+            margin: 30px 20px; 
+        }
+
     </style>
+
 </head>
+
 <body>
+
     <button class="toggle-btn" onclick="toggleSidebar()">&#9776;</button>
     
     <div class="sidebar">
@@ -451,7 +458,7 @@
                 <input type="submit" value="Generate QR Code">
             </form>
             <div class="separator-m"></div>
-        <!-- Display QR Code -->
+        
         <div class="qr-code-result">
             <?php
             if (isset($_GET['qr_code_url'])) {
@@ -466,16 +473,16 @@
         </div>
     </div>
 
-    <!-- User List Modal -->
     <div id="userModal" class="modal">
         <div class="modal-content">
             <span class="modal-close">&times;</span>
             <ul id="userList"></ul>
         </div>
     </div>
-    </div>
+</div>
 
     <script>
+
         function toggleSidebar() {
             document.body.classList.toggle('collapsed');
         }
@@ -494,11 +501,10 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+           const dateDisplay = document.querySelector('.date-display'); const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; 
+           const today = new Date(); dateDisplay.textContent = today.toLocaleDateString('en-US', options); })
            
-const dateDisplay = document.querySelector('.date-display'); const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }; 
-const today = new Date(); dateDisplay.textContent = today.toLocaleDateString('en-US', options); })
-
-function searchUsers() {
+           function searchUsers() {
             const input = document.getElementById('searchInput').value.toLowerCase();
             const userList = document.getElementById('userList');
             const userModal = document.getElementById('userModal');
@@ -560,7 +566,7 @@ function searchUsers() {
         }
 
         function printQRCode() {
-            const qrImage = document.getElementById('qrImage');  // Get the QR code image element
+            const qrImage = document.getElementById('qrImage'); 7
             if (qrImage) {
               
                 const newWindow = window.open('', '', 'height=600,width=800');
@@ -575,6 +581,9 @@ function searchUsers() {
                 alert('No QR code available to print.');
             }
         }
+
     </script>
+
 </body>
+
 </html>
