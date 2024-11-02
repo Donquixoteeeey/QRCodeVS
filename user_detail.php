@@ -180,33 +180,36 @@ if ($userId) {
         </div>
 
         <div class="qr-code">
-            <?php if (!empty($user['qr_code_url'])): ?>
-                <img src="<?php echo htmlspecialchars($user['qr_code_url']); ?>" alt="QR Code" id="qrCodeImage">
-                <h2>Generated QR Code</h2>
-                <div class="button-container">
-                    <button onclick="printQRCode('<?php echo htmlspecialchars($user['name']); ?>')" class="action-button">Print</button>
-                    <button onclick="downloadQRCode()" class="action-button">Download</button>
-                </div>
-            <?php else: ?>
-                <h2>No QR Code generated for this user.</h2>
-            <?php endif; ?>
+    <?php if (!empty($user['qr_code_url'])): ?>
+        <img src="<?php echo htmlspecialchars($user['qr_code_url']); ?>" alt="QR Code" id="qrCodeImage">
+        <h2>Generated QR Code</h2>
+        <div class="button-container">
+            <button onclick="printQRCode('<?php echo htmlspecialchars($user['plate_number']); ?>')" class="action-button">Print</button>
+            <button onclick="downloadQRCode()" class="action-button">Download</button>
         </div>
-    </div>
+    <?php else: ?>
+        <h2>No QR Code generated for this user.</h2>
+    <?php endif; ?>
+</div>
+
 </div>
 
 <script>
 
-    function printQRCode(userName) {
-        const qrCodeImage = document.getElementById('qrCodeImage').src;
-        const printWindow = window.open('', '', 'width=600,height=400');
-        printWindow.document.write('<html><head><title>Print QR Code</title>');
-        printWindow.document.write('</head><body>');
-        printWindow.document.write('<h2>Generated QR Code for ' + userName + '</h2>');
-        printWindow.document.write('<img src="' + qrCodeImage + '" alt="QR Code">');
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.print();
-    }
+function printQRCode(plateNumber) {
+    const qrCodeImage = document.getElementById('qrCodeImage').src;
+    const printWindow = window.open('', '', 'width=600,height=400');
+    printWindow.document.write('<html><head><title>Print QR Code</title>');
+    printWindow.document.write('<style>body { text-align: center; font-family: Arial, sans-serif; }'); // Change font family here
+    printWindow.document.write('h2 { font-size: 24px; color: #333; }'); // Change font size and color here
+    printWindow.document.write('</style>'); // End of style
+    printWindow.document.write('</head><body>');
+    printWindow.document.write('<img src="' + qrCodeImage + '" alt="QR Code">');
+    printWindow.document.write('<h2>' + plateNumber + '</h2>'); // Display the plate number below the QR code
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+}
 
     function downloadQRCode() {
         const qrCodeImage = document.getElementById('qrCodeImage').src;
@@ -234,7 +237,7 @@ if ($userId) {
             }, 'image/png');
         };
     }
-    
+
 </script>
 
 </body>

@@ -545,6 +545,7 @@ function logTime(qrCodeText) {
 
     const scanButton = document.getElementById('scanButton');
     scanButton.addEventListener('click', startCamera);
+    
 });
 
 function fetchLogsFromDatabase() {

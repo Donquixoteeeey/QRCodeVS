@@ -27,7 +27,7 @@ if (isset($data['userId'])) {
     $lastAction = $result->fetch_assoc();
 
     if (isset($data['timeIn'])) {
-        // Prevent double time-in
+        
         if ($lastAction && $lastAction['action_type'] === 'IN') {
             echo json_encode(["status" => "error", "message" => "Already timed in. Please time out before timing in again."]);
             exit;
