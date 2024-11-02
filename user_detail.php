@@ -4,7 +4,7 @@ include 'db_connect.php';
 $userId = $_GET['id'] ?? '';
 
 if ($userId) {
-    $sql = "SELECT id, name, vehicle, plate_number, contact_number, qr_code_url FROM user_info WHERE id = ?";
+    $sql = "SELECT id, name, vehicle, plate_number, contact_number, qr_code_url, expiration_date FROM user_info WHERE id = ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bind_param('i', $userId);
@@ -38,7 +38,6 @@ if ($userId) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -109,6 +108,7 @@ if ($userId) {
 
         dd {
             margin: 0;
+            margin-left: 20px;
             color: #666;
         }
 
@@ -118,28 +118,29 @@ if ($userId) {
         }
 
         .qr-code img {
-            width: 150px; 
-            height: 150px; 
+            width: 150px;
+            height: 150px;
             margin-right: 20px;
+            border-radius: 10px;
         }
 
         .qr-code h2 {
             font-family: 'Inter', sans-serif;
-            font-size: 16px; 
-            margin-top: 10px; 
-            color: #2a3d6b; 
+            font-size: 16px;
+            margin-top: 10px;
+            color: #2a3d6b;
             margin-right: 20px;
         }
 
         .button-container {
-            display: flex; 
-            justify-content: center; 
-            margin-top: 10px; 
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
         }
-        
+
         .action-button {
             padding: 10px 20px;
-            margin: 0 10px; 
+            margin: 0 10px;
             background-color: #007bff;
             color: white;
             border: none;
@@ -149,57 +150,58 @@ if ($userId) {
             transition: background-color 0.3s ease;
             width: 110px;
         }
-        
+
         .action-button:hover {
             background-color: #0056b3;
         }
-
     </style>
 
 </head>
 
 <body>
 
-    <div class="container">
-        <a href="user_info.php" class="back-button"><i class="fas fa-arrow-left"></i> Back to User Information</a>
-        <h1>User Details</h1>
-        <div class="content">
-            <div class="details">
-                <dl>
-                    <dt>Name:</dt>
-                    <dd><?php echo htmlspecialchars($user['name']); ?></dd>
-                    <dt>Vehicle:</dt>
-                    <dd><?php echo htmlspecialchars($user['vehicle']); ?></dd>
-                    <dt>Plate Number:</dt>
-                    <dd><?php echo htmlspecialchars($user['plate_number']); ?></dd>
-                    <dt>Contact Number:</dt>
-                    <dd><?php echo htmlspecialchars($user['contact_number']); ?></dd>
-                </dl>
-            </div>
+<div class="container">
+    <a href="user_info.php" class="back-button"><i class="fas fa-arrow-left"></i> Back to User Information</a>
+    <h1>User Details</h1>
+    <div class="content">
+        <div class="details">
+            <dl>
+                <dt>Name:</dt>
+                <dd><?php echo htmlspecialchars($user['name']); ?></dd>
+                <dt>Vehicle:</dt>
+                <dd><?php echo htmlspecialchars($user['vehicle']); ?></dd>
+                <dt>Plate Number:</dt>
+                <dd><?php echo htmlspecialchars($user['plate_number']); ?></dd>
+                <dt>Contact Number:</dt>
+                <dd><?php echo htmlspecialchars($user['contact_number']); ?></dd>
+                <dt>QR Code Expiration Date:</dt>
+                <dd><?php echo htmlspecialchars($user['expiration_date']); ?></dd>
+            </dl>
+        </div>
 
-            <div class="qr-code">
-                <?php if (!empty($user['qr_code_url'])): ?>
-                    <img src="<?php echo htmlspecialchars($user['qr_code_url']); ?>" alt="QR Code" id="qrCodeImage">
-                    <h2>Generated QR Code</h2>
-                    <div class="button-container">
-                        <button onclick="printQRCode()" class="action-button">Print</button>
-                        <button onclick="downloadQRCode()" class="action-button">Download</button>
-                    </div>
-                    <?php else: ?>
-                        <h2>No QR Code generated for this user.</h2>
-                        <?php endif; ?>
-                    </div>
+        <div class="qr-code">
+            <?php if (!empty($user['qr_code_url'])): ?>
+                <img src="<?php echo htmlspecialchars($user['qr_code_url']); ?>" alt="QR Code" id="qrCodeImage">
+                <h2>Generated QR Code</h2>
+                <div class="button-container">
+                    <button onclick="printQRCode('<?php echo htmlspecialchars($user['name']); ?>')" class="action-button">Print</button>
+                    <button onclick="downloadQRCode()" class="action-button">Download</button>
                 </div>
-            </div>
+            <?php else: ?>
+                <h2>No QR Code generated for this user.</h2>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
 
 <script>
 
-    function printQRCode() {
+    function printQRCode(userName) {
         const qrCodeImage = document.getElementById('qrCodeImage').src;
         const printWindow = window.open('', '', 'width=600,height=400');
         printWindow.document.write('<html><head><title>Print QR Code</title>');
         printWindow.document.write('</head><body>');
-        printWindow.document.write('<h2>Generated QR Code</h2>');
+        printWindow.document.write('<h2>Generated QR Code for ' + userName + '</h2>');
         printWindow.document.write('<img src="' + qrCodeImage + '" alt="QR Code">');
         printWindow.document.write('</body></html>');
         printWindow.document.close();
@@ -232,8 +234,8 @@ if ($userId) {
             }, 'image/png');
         };
     }
+    
 </script>
 
 </body>
-
 </html>

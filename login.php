@@ -105,6 +105,15 @@
             color: #aaa;
         }
 
+        .remember-me-container {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            margin-left: 40px;
+            margin-top: 10px;
+            font-family: 'Istok Web', sans-serif;
+        }
+
         .login-container button {
             width: 100%;
             padding: 10px;
@@ -123,20 +132,31 @@
             background-color: #0056b3;
         }
 
-        .forgot-password {
-            display: block;
-            margin-top: 10px;
-            margin-left: 210px;
-            color: #0056b3;
-            text-decoration: none;
-            font-size: 14px;
+
+        .remember-me-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px; 
+            justify-content: flex-end; 
+            margin-right: 120px;
+        }
+
+        .remember-me-container input[type="checkbox"] {
+            width: 15px; 
+            height: 20px; 
+            margin-right: 10px; 
+        }
+
+        .remember-me-container label {
+            font-size: 13px; 
+            color: #000522; 
             font-family: 'Istok Web', sans-serif;
+            cursor: pointer;
         }
 
-        .forgot-password:hover {
-            text-decoration: underline;
+        .remember-me-container label:hover {
+            color: #0056b3; 
         }
-
     </style>
 
 </head>
@@ -146,7 +166,7 @@
     <img src="img/CPC LOGO BACKROUND REMOVED.png" alt="logo" class="logo">
     <div class="cpc-text">COLEGIO DE LA PURISIMA CONCEPCION</div>
 
-    <div class="login-container">
+    <form class="login-container" onsubmit="checkLogin(event)">
         <img src="img/QR CODE VERIFICATION SYSTEM LOGO.png" alt="Login Form Image">
         <div class="input-container">
             <i class="fas fa-user"></i>
@@ -157,61 +177,96 @@
             <input type="password" id="password" name="password" placeholder="Password" required>
             <i class="fas fa-eye view-password" id="togglePassword"></i>
         </div>
-        <a href="forgot-password.php" class="forgot-password">Forgot Password?</a>
-        <button type="button" onclick="checkLogin()">LOGIN</button>
-    </div>
+        
+        <div class="input-container remember-me-container">
+            <input type="checkbox" id="rememberMe" name="rememberMe">
+            <label for="rememberMe">Remember Me</label>
+        </div>
+
+        <button type="submit">LOGIN</button>
+    </form>
 
     <script>
 
-    const togglePassword = document.getElementById('togglePassword');
-    const password = document.getElementById('password');
-    const username = document.getElementById('username');
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+        const username = document.getElementById('username');
 
-    togglePassword.addEventListener('click', function () {
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        this.classList.toggle('fa-eye-slash');
-    });
+        togglePassword.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
 
-    function checkLogin() {
-        event.preventDefault();
-
-        const validAdmins = [
-            { username: "admin", password: "password", redirect: "dashboard.php" },
-            { username: "admin2", password: "password2", redirect: "phone_activity_logs.php" } 
-        ];
-
-        // Get the input values
-        const usernameValue = username.value;
-        const passwordValue = password.value;
-
-        if (usernameValue === "" || passwordValue === "") {
-            alert("Please fill out both fields.");
-            return;
+        document.addEventListener("DOMContentLoaded", function () {
+            const savedUsername = getCookie("username");
+            const savedPassword = getCookie("password");
+            
+            if (savedUsername) {
+                username.value = savedUsername;
+                document.getElementById('rememberMe').checked = true; 
+            }
+            if (savedPassword) {
+                password.value = savedPassword;
+            }
+        });
+        
+        function checkLogin(event) {
+            event.preventDefault();
+            
+            const usernameValue = username.value;
+            const passwordValue = password.value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            if (rememberMe) {
+                setCookie("username", usernameValue, 7); 
+                setCookie("password", passwordValue, 7);
+            } else {
+                deleteCookie("username"); 
+                deleteCookie("password"); 
+            }
+            
+            fetch('admin_login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: usernameValue, password: passwordValue }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+        
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+        }
+        
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+        
+        function deleteCookie(name) {
+            document.cookie = name + '=; Max-Age=-99999999;';
         }
 
-        const admin = validAdmins.find(admin => 
-            admin.username === usernameValue && admin.password === passwordValue
-        );
-
-        if (admin) {
-            window.location.href = admin.redirect; 
-        } else {
-            alert("Invalid login credentials. Please try again.");
-        }
-    }
-
-    username.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            checkLogin();
-        }
-    });
-
-    password.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            checkLogin();
-        }
-    });
     </script>
 
 </body>

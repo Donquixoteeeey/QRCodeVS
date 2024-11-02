@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 
 $name = $_GET['name'];
 
-$sql = "SELECT id, name FROM user_info WHERE name LIKE ?";
+$sql = "SELECT id, name, vehicle, plate_number FROM user_info WHERE name LIKE ?";
 $stmt = $conn->prepare($sql);
 $searchTerm = "%$name%";
 $stmt->bind_param("s", $searchTerm);

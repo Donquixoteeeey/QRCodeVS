@@ -347,7 +347,6 @@
             to { opacity: 1; }
         }
 
-
         .qr-code-form input[type="submit"] {
             background: linear-gradient(135deg, #4a90e2, #50e3c2);
             border: none;
@@ -513,25 +512,26 @@
                 userModal.style.display = 'none';
                 return;
             }
-
+            
             fetch('search_users.php?name=' + encodeURIComponent(input))
-                .then(response => response.json())
-                .then(data => {
-                    userList.innerHTML = '';
-                    data.forEach(user => {
-                        const li = document.createElement('li');
-                        li.textContent = user.name;
-                        li.dataset.id = user.id;
-                        li.onclick = function() {
-                            document.querySelector('input[name="user_id"]').value = this.dataset.id;
-                            document.getElementById('searchInput').value = this.textContent;
-                            userModal.style.display = 'none';
-                        };
-                        userList.appendChild(li);
-                    });
-                    userModal.style.display = 'flex';
-                })
-                .catch(error => console.error('Error:', error));
+            .then(response => response.json())
+            .then(data => {
+                userList.innerHTML = '';
+                data.forEach(user => {
+                    const li = document.createElement('li');
+                    
+                    li.textContent = `${user.name} - ${user.vehicle} (Plate: ${user.plate_number})`;
+                    li.dataset.id = user.id;
+                    li.onclick = function() {
+                        document.querySelector('input[name="user_id"]').value = this.dataset.id;
+                        document.getElementById('searchInput').value = this.textContent.split(' - ')[0]; 
+                        userModal.style.display = 'none';
+                    };
+                    userList.appendChild(li);
+                });
+                userModal.style.display = 'flex';
+            })
+            .catch(error => console.error('Error:', error));
         }
 
         const closeModal = document.querySelector('.modal-close');
@@ -566,14 +566,13 @@
         }
 
         function printQRCode() {
-            const qrImage = document.getElementById('qrImage'); 7
+            const qrImage = document.getElementById('qrImage');
             if (qrImage) {
-              
                 const newWindow = window.open('', '', 'height=600,width=800');
                 newWindow.document.write('<html><head><title>Print QR Code</title></head><body>');
-                newWindow.document.write('<img src="' + qrImage.src + '" style="width: 100%; height: auto;"/>');
+                newWindow.document.write('<img src="' + qrImage.src + '" style="width: 200px; height: auto;"/>'); // Set width to 200px
                 newWindow.document.write('</body></html>');
-                
+        
                 newWindow.document.close();
                 newWindow.focus();
                 newWindow.print();
