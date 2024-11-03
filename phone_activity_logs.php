@@ -202,7 +202,7 @@
     <div class="header-icons">
         <div class="admin-profile">A
             <div class="dropdown">
-                <a href="login.php">Logout</a>
+                <a href="phone_login.php">Logout</a>
             </div>
         </div>
     </div>

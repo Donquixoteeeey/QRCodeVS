@@ -26,7 +26,7 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     
     if ($password === $row['password']) {
-        // Redirect admin2 to a different page
+        
         $redirectUrl = ($username === 'admin2') ? 'phone_activity_logs.php' : 'dashboard.php';
         echo json_encode(['success' => true, 'redirect' => $redirectUrl]);
     } else {
