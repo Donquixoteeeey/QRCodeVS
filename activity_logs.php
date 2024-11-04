@@ -389,6 +389,7 @@
     </tbody>
 </table>
         </div>
+        <div style="height: 40px;"></div>
     </div>
 
 <script src="https://unpkg.com/@zxing/library@latest"></script>

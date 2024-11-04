@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($name_err) && empty($vehicle_err) && empty($plate_number_err) && empty($contact_number_err)) {
-        // Modified SQL to include registration_date
+        
         $sql = "INSERT INTO user_info (name, vehicle, plate_number, contact_number, registration_date) VALUES (?, ?, ?, ?, NOW())";
 
         if ($stmt = $conn->prepare($sql)) {

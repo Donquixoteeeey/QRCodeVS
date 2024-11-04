@@ -309,6 +309,25 @@
         width: 100%; 
         font-family: 'Inter', sans-serif; 
     }
+
+    .users-table-container {
+        font-family: 'Inter', sans-serif;
+        width: 97%; 
+    margin-top: 10px; 
+    background-color: #fff; 
+    border-radius: 15px; 
+    padding: 20px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+    margin-bottom: 40px; /* Increase margin-bottom to add more space */
+    }
+
+    .users-table-container h2 {
+        font-family: 'Comfortaa', cursive; 
+        color: #2C2B6D; 
+        margin-bottom: 20px; 
+        margin-top: 10px;
+        font-size: 22px; 
+    }
     
     .table-container {
         width: 45%; 
@@ -327,13 +346,15 @@
         margin-top: 10px;
         font-size: 22px; 
     }
-    
+
+    .all-registered-users-table,
     .user-details-table,
     .previously-scanned-table {
         width: 100%; 
         border-collapse: collapse; 
     }
-    
+    .all-registered-users-table th,
+    .all-registered-users-table td,
     .user-details-table th,
     .user-details-table td,
     .previously-scanned-table th,
@@ -345,6 +366,7 @@
         border-top-right-radius: 10px; 
     }
     
+    .all-registered-users-table th,
     .user-details-table th,
     .previously-scanned-table th {
         background-color: #2C2B6D; 
@@ -352,6 +374,51 @@
         color: #f1f1f1;
         font-size: 15px;
     }
+
+    .search-input {
+    margin-bottom: 20px;
+    padding: 10px;
+    width: 98%; 
+    border: 1px solid #ddd;
+    border-radius: 5px; 
+    font-size: 16px; 
+    color: #333; 
+    
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-input:focus {
+    outline: none; 
+    border-color: #2C2B6D; /* Change border color on focus */
+    box-shadow: 0 0 5px rgba(44, 43, 109, 0.5); /* Add shadow on focus */
+}
+.table-scroll-container {
+    max-height: 300px; /* Set a maximum height for the table */
+    overflow-y: auto;  /* Enable vertical scrolling */
+    border: 1px solid #ddd; /* Optional: Add a border around the scroll container */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    margin-top: 10px; /* Spacing from the input field */
+}
+
+.all-registered-users-table {
+    width: 100%;
+    border-collapse: collapse; /* Collapse borders to make it look cleaner */
+}
+
+.all-registered-users-table th,
+.all-registered-users-table td {
+    padding: 10px; 
+    text-align: left; 
+}
+
+.all-registered-users-table thead {
+    position: sticky; /* Make the header sticky */
+    top: 0; /* Stick the header to the top of the scroll container */
+    background-color: #2C2B6D; /* Background color for the header */
+    color: #f1f1f1; /* Text color for the header */
+    z-index: 10; /* Ensure it is above other content */
+}
+
 
     </style>
 
@@ -448,8 +515,83 @@
 
 </div>
 
+<div class="users-table-container">
+    <h2>All Registered Users</h2> 
+    <input type="text" id="search-input" placeholder="Search by Name..." class="search-input">
+    <div class="table-scroll-container"> <!-- New scrollable container -->
+        <table class="all-registered-users-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Vehicle</th>
+                    <th>Plate Number</th>
+                </tr>
+            </thead>
+            <tbody id="all-registered-body">
+                <!-- User data will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+</div>
 
+
+
+<div style="height: 40px;"></div>
 <script>
+    
+
+    
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('get_all_users.php')  // Make sure this path matches where you store your PHP file
+        .then(response => response.json())
+        .then(data => {
+            const allRegisteredBody = document.getElementById('all-registered-body');
+            allRegisteredBody.innerHTML = ''; 
+
+            // Store the user data for filtering later
+            const users = data;
+
+            // Function to render users in the table
+            function renderUsers(usersToRender) {
+    allRegisteredBody.innerHTML = '';
+    usersToRender.forEach(user => {
+        const row = document.createElement('tr');
+
+        // Set up a click event listener for the entire row
+        row.addEventListener('click', () => {
+            // Redirect to user_activities.php with user_id
+            window.location.href = `user_activities.php?user_id=${user.id}`;
+        });
+
+        // Fill the row with user data
+        row.innerHTML = `
+            <td>${user.name}</td>
+            <td>${user.vehicle}</td>
+            <td>${user.plate_number}</td>
+        `;
+
+        // Append the row to the table body
+        allRegisteredBody.appendChild(row);
+    });
+}
+
+
+            // Initially render all users
+            renderUsers(users);
+
+            // Implementing the search function
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('keyup', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const filteredUsers = users.filter(user => 
+                    user.name.toLowerCase().includes(searchTerm)
+                );
+                renderUsers(filteredUsers);
+            });
+        })
+        .catch(error => console.error('Error fetching all registered users:', error));
+});
+
 
 document.addEventListener('DOMContentLoaded', function() {
     fetch('get_recent_scans.php')

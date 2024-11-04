@@ -495,7 +495,7 @@ $result = $stmt->get_result();
 
    <div class="table-container">
     <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search users...">
+        <input type="text" id="search-input" placeholder="Search Users...">
         <button type="submit" class="btn-search"><i class="fas fa-search"></i> Search</button>
     </div>
     <a href="add_user.php" class="btn-add"><i class="fas fa-plus"></i> Add User</a>

@@ -1,4 +1,7 @@
 <?php 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
 
 if ($user_id <= 0) {
@@ -33,15 +36,18 @@ if ($user) {
     $qr_code_url = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' . $qr_code_data;
 
     $expiration_date = date('Y-m-d H:i:s', strtotime('+1 year'));
+    $generated_at = date('Y-m-d H:i:s'); // Current date and time
 
-    $update_sql = "UPDATE user_info SET qr_code_url = ?, expiration_date = ? WHERE id = ?";
+    $update_sql = "UPDATE user_info SET qr_code_url = ?, expiration_date = ?, qr_code_generated_at = ? WHERE id = ?";
     $update_stmt = $conn->prepare($update_sql);
-    $update_stmt->bind_param('ssi', $qr_code_url, $expiration_date, $user_id);
+    $update_stmt->bind_param('sssi', $qr_code_url, $expiration_date, $generated_at, $user_id);
     
     if ($update_stmt->execute()) {
         echo "QR Code URL: <a href='" . htmlspecialchars($qr_code_url) . "' target='_blank'>" . htmlspecialchars($qr_code_url) . "</a><br>";
-        echo "Expiration Date: " . htmlspecialchars($expiration_date);
+        echo "Expiration Date: " . htmlspecialchars($expiration_date) . "<br>";
+        echo "QR Code Generated At: " . htmlspecialchars($generated_at); // Display generated date
 
+        
         header('Location: qr_code_management.php?qr_code_url=' . urlencode($qr_code_url));
         exit;
     } else {
@@ -53,5 +59,3 @@ if ($user) {
 
 $conn->close();
 ?>
-
-
