@@ -318,7 +318,7 @@
     border-radius: 15px; 
     padding: 20px; 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
-    margin-bottom: 40px; /* Increase margin-bottom to add more space */
+    margin-bottom: 40px; 
     }
 
     .users-table-container h2 {
@@ -380,7 +380,7 @@
     padding: 10px;
     width: 98%; 
     border: 1px solid #ddd;
-    border-radius: 5px; 
+    border-radius: 20px; 
     font-size: 16px; 
     color: #333; 
     
@@ -389,20 +389,20 @@
 
 .search-input:focus {
     outline: none; 
-    border-color: #2C2B6D; /* Change border color on focus */
-    box-shadow: 0 0 5px rgba(44, 43, 109, 0.5); /* Add shadow on focus */
+    border-color: #2C2B6D; 
+    box-shadow: 0 0 5px rgba(44, 43, 109, 0.5); 
 }
 .table-scroll-container {
-    max-height: 300px; /* Set a maximum height for the table */
-    overflow-y: auto;  /* Enable vertical scrolling */
-    border: 1px solid #ddd; /* Optional: Add a border around the scroll container */
-    border-radius: 10px; /* Optional: Add rounded corners */
-    margin-top: 10px; /* Spacing from the input field */
+    max-height: 300px; 
+    overflow-y: auto; 
+    border: 1px solid #ddd; 
+    border-radius: 10px; 
+    margin-top: 10px;
 }
 
 .all-registered-users-table {
     width: 100%;
-    border-collapse: collapse; /* Collapse borders to make it look cleaner */
+    border-collapse: collapse; 
 }
 
 .all-registered-users-table th,
@@ -412,11 +412,11 @@
 }
 
 .all-registered-users-table thead {
-    position: sticky; /* Make the header sticky */
-    top: 0; /* Stick the header to the top of the scroll container */
-    background-color: #2C2B6D; /* Background color for the header */
-    color: #f1f1f1; /* Text color for the header */
-    z-index: 10; /* Ensure it is above other content */
+    position: sticky; 
+    top: 0; 
+    background-color: #2C2B6D; 
+    color: #f1f1f1; 
+    z-index: 10;
 }
 
 
@@ -522,9 +522,10 @@
         <table class="all-registered-users-table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Vehicle</th>
-                    <th>Plate Number</th>
+                <th>User ID</th>
+        <th>Name</th>
+        <th>Vehicle</th>
+        <th>Plate Number</th>
                 </tr>
             </thead>
             <tbody id="all-registered-body">
@@ -542,44 +543,42 @@
 
     
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('get_all_users.php')  // Make sure this path matches where you store your PHP file
+    fetch('get_all_users.php')  
         .then(response => response.json())
         .then(data => {
             const allRegisteredBody = document.getElementById('all-registered-body');
             allRegisteredBody.innerHTML = ''; 
 
-            // Store the user data for filtering later
+            
             const users = data;
 
-            // Function to render users in the table
+           
             function renderUsers(usersToRender) {
     allRegisteredBody.innerHTML = '';
     usersToRender.forEach(user => {
         const row = document.createElement('tr');
 
-        // Set up a click event listener for the entire row
         row.addEventListener('click', () => {
-            // Redirect to user_activities.php with user_id
             window.location.href = `user_activities.php?user_id=${user.id}`;
         });
 
-        // Fill the row with user data
+        
         row.innerHTML = `
+            <td>${user.id}</td> <!-- User ID added here -->
             <td>${user.name}</td>
             <td>${user.vehicle}</td>
             <td>${user.plate_number}</td>
         `;
 
-        // Append the row to the table body
         allRegisteredBody.appendChild(row);
     });
 }
 
 
-            // Initially render all users
+            
             renderUsers(users);
 
-            // Implementing the search function
+            
             const searchInput = document.getElementById('search-input');
             searchInput.addEventListener('keyup', function() {
                 const searchTerm = searchInput.value.toLowerCase();

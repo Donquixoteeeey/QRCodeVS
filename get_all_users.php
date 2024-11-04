@@ -14,7 +14,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT name, vehicle, plate_number FROM user_info"; // Adjust the column names as needed
+$sql = "SELECT id, name, vehicle, plate_number FROM user_info"; 
 $result = $conn->query($sql);
 
 $users = [];

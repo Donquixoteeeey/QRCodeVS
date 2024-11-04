@@ -1,24 +1,39 @@
 <?php
-
 include 'db_connect.php';
 
 if (isset($_GET['user_id'])) {
     $user_id = $_GET['user_id'];
 
-    $query = "SELECT time_timestamp, action_type FROM user_time_logs WHERE user_id = ?";
-    $stmt = $conn->prepare($query);
+
+    $user_query = "SELECT name FROM user_info WHERE id = ?";
+    $user_stmt = $conn->prepare($user_query);
+    $user_stmt->bind_param("i", $user_id);
+    $user_stmt->execute();
+    $user_result = $user_stmt->get_result();
+    
+    if ($user_result->num_rows > 0) {
+        $user_row = $user_result->fetch_assoc();
+        $user_name = $user_row['name'];
+    } else {
+        echo "User not found.";
+        exit;
+    }
+
+    
+    $activity_query = "SELECT time_timestamp, action_type FROM user_time_logs WHERE user_id = ?";
+    $stmt = $conn->prepare($activity_query);
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Fetch the results
     $activities = [];
     while ($row = $result->fetch_assoc()) {
         $activities[] = $row;
     }
 
-    // Close the statement and connection
+    
     $stmt->close();
+    $user_stmt->close();
     $conn->close();
 } else {
     echo "No user ID provided.";
@@ -34,11 +49,98 @@ if (isset($_GET['user_id'])) {
     <title>User Activities</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* Add your CSS styles here */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 30px;
+            font-family: 'Inter', sans-serif;
+        }
+        table {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #2C2B6D;
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #eaf3ff;
+        }
+        tbody td {
+            font-family: 'Inter', sans-serif;
+            color: #555;
+        }
+        tbody td:first-child {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            color: #333;
+        }
+      
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+       
+        @media (max-width: 600px) {
+            table, th, td {
+                font-size: 14px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+
+        .back-button {
+            display: inline-block;
+            margin: 20px 0 20px 80px; 
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #2C2B6D;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .back-button:hover {
+            background-color: #4342a5;
+        }
     </style>
 </head>
 <body>
-    <h1>User Activities for User ID: <?php echo htmlspecialchars($user_id); ?></h1>
+<button class="back-button" onclick="history.back()">Back</button>
+    <h1>User Activities for <?php echo htmlspecialchars($user_name); ?> (User ID: <?php echo htmlspecialchars($user_id); ?>)</h1>
     <table>
         <thead>
             <tr>
@@ -49,13 +151,13 @@ if (isset($_GET['user_id'])) {
         <tbody>
             <?php if (empty($activities)): ?>
                 <tr>
-                    <td colspan="2">No activities found for this user.</td>
+                    <td colspan="2" class="empty-state">No activities found for this user.</td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($activities as $activity): ?>
                     <tr>
                         <td><?php echo date("Y-m-d H:i:s", strtotime($activity['time_timestamp'])); ?></td>
-                        <td><?php echo $activity['action_type']; ?></td>
+                        <td><?php echo htmlspecialchars($activity['action_type']); ?></td>
                     </tr>
                 <?php endforeach; ?>
             <?php endif; ?>
