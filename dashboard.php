@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -516,9 +517,9 @@
 </div>
 
 <div class="users-table-container">
-    <h2>All Registered Users</h2> 
+    <h2>View User's Activity</h2> 
     <input type="text" id="search-input" placeholder="Search by Name..." class="search-input">
-    <div class="table-scroll-container"> <!-- New scrollable container -->
+    <div class="table-scroll-container"> 
         <table class="all-registered-users-table">
             <thead>
                 <tr>

@@ -4,8 +4,8 @@ include 'db_connect.php';
 if (isset($_GET['user_id'])) {
     $user_id = $_GET['user_id'];
 
-
-    $user_query = "SELECT name FROM user_info WHERE id = ?";
+    // Query to get the user's name, vehicle, and plate number
+    $user_query = "SELECT name, vehicle, plate_number FROM user_info WHERE id = ?";
     $user_stmt = $conn->prepare($user_query);
     $user_stmt->bind_param("i", $user_id);
     $user_stmt->execute();
@@ -14,12 +14,14 @@ if (isset($_GET['user_id'])) {
     if ($user_result->num_rows > 0) {
         $user_row = $user_result->fetch_assoc();
         $user_name = $user_row['name'];
+        $vehicle = $user_row['vehicle'];
+        $plate_number = $user_row['plate_number'];
     } else {
         echo "User not found.";
         exit;
     }
 
-    
+    // Query to get the user activities
     $activity_query = "SELECT time_timestamp, action_type FROM user_time_logs WHERE user_id = ?";
     $stmt = $conn->prepare($activity_query);
     $stmt->bind_param("i", $user_id);
@@ -31,7 +33,6 @@ if (isset($_GET['user_id'])) {
         $activities[] = $row;
     }
 
-    
     $stmt->close();
     $user_stmt->close();
     $conn->close();
@@ -49,7 +50,6 @@ if (isset($_GET['user_id'])) {
     <title>User Activities</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        
         * {
             margin: 0;
             padding: 0;
@@ -66,9 +66,14 @@ if (isset($_GET['user_id'])) {
             font-weight: 600;
             color: #333;
             text-align: center;
-            margin-bottom: 30px;
             margin-top: 30px;
             font-family: 'Inter', sans-serif;
+        }
+        .user-info {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #555;
+            font-size: 1.1em;
         }
         table {
             width: 100%;
@@ -104,14 +109,12 @@ if (isset($_GET['user_id'])) {
             font-weight: 500;
             color: #333;
         }
-      
         .empty-state {
             text-align: center;
             padding: 20px;
             color: #666;
             font-style: italic;
         }
-       
         @media (max-width: 600px) {
             table, th, td {
                 font-size: 14px;
@@ -120,10 +123,9 @@ if (isset($_GET['user_id'])) {
                 font-size: 1.5em;
             }
         }
-
         .back-button {
             display: inline-block;
-            margin: 20px 0 20px 80px; 
+            margin: 20px 0 20px 80px;
             padding: 10px 20px;
             font-size: 16px;
             color: #fff;
@@ -136,11 +138,24 @@ if (isset($_GET['user_id'])) {
         .back-button:hover {
             background-color: #4342a5;
         }
+        .user-info {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #555;
+    font-size: 1.1em;
+    padding: 10px; 
+    margin: 20px auto; 
+    max-width: 600px;
+}
     </style>
 </head>
 <body>
 <button class="back-button" onclick="history.back()">Back</button>
-    <h1>User Activities for <?php echo htmlspecialchars($user_name); ?> (User ID: <?php echo htmlspecialchars($user_id); ?>)</h1>
+    <h1>User <?php echo htmlspecialchars($user_name); ?>'s Activity (User ID: <?php echo htmlspecialchars($user_id); ?>)</h1>
+    <div class="user-info">
+        <p>Vehicle: <?php echo htmlspecialchars($vehicle); ?></p>
+        <p>Plate Number: <?php echo htmlspecialchars($plate_number); ?></p>
+    </div>
     <table>
         <thead>
             <tr>
