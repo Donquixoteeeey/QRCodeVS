@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-date_default_timezone_set('Asia/Manila'); // Set the timezone to Philippine Time
+date_default_timezone_set('Asia/Manila'); 
 
 $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
 
@@ -41,10 +41,9 @@ if ($user) {
     $qr_code_data = 'Name: ' . urlencode($user_name) . ' | Vehicle: ' . urlencode($vehicle) . ' | Plate Number: ' . urlencode($plate_number);
     $qr_code_url = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' . $qr_code_data;
 
-    $expiration_date = date('Y-m-d H:i:s', strtotime('+1 year')); // Set expiration date 1 year from now in PHT
-    $generated_at = date('Y-m-d H:i:s'); // Current date and time in PHT
-
-    // Update database with new QR code URL, expiration date, and created_at
+    $expiration_date = date('Y-m-d H:i:s', strtotime('+1 year')); 
+    $generated_at = date('Y-m-d H:i:s'); 
+   
     $update_sql = "UPDATE user_info SET qr_code_url = ?, expiration_date = ?, qr_code_generated_at = ? WHERE id = ?";
     $update_stmt = $conn->prepare($update_sql);
     $update_stmt->bind_param('sssi', $qr_code_url, $expiration_date, $generated_at, $user_id);
@@ -52,7 +51,7 @@ if ($user) {
     if ($update_stmt->execute()) {
         echo "QR Code URL: <a href='" . htmlspecialchars($qr_code_url) . "' target='_blank'>" . htmlspecialchars($qr_code_url) . "</a><br>";
         echo "Expiration Date: " . htmlspecialchars($expiration_date) . "<br>";
-        echo "QR Code Generated At: " . htmlspecialchars($generated_at); // Display generated date
+        echo "QR Code Generated At: " . htmlspecialchars($generated_at); 
 
         // Redirect after successful update
         header('Location: qr_code_management.php?qr_code_url=' . urlencode($qr_code_url));

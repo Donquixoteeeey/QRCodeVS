@@ -4,7 +4,7 @@ include 'db_connect.php';
 if (isset($_GET['user_id'])) {
     $user_id = $_GET['user_id'];
 
-    // Query to get the user's name, vehicle, and plate number
+    
     $user_query = "SELECT name, vehicle, plate_number FROM user_info WHERE id = ?";
     $user_stmt = $conn->prepare($user_query);
     $user_stmt->bind_param("i", $user_id);
@@ -21,7 +21,7 @@ if (isset($_GET['user_id'])) {
         exit;
     }
 
-    // Query to get the user activities
+    
     $activity_query = "SELECT time_timestamp, action_type FROM user_time_logs WHERE user_id = ?";
     $stmt = $conn->prepare($activity_query);
     $stmt->bind_param("i", $user_id);
@@ -69,12 +69,7 @@ if (isset($_GET['user_id'])) {
             margin-top: 30px;
             font-family: 'Inter', sans-serif;
         }
-        .user-info {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #555;
-            font-size: 1.1em;
-        }
+      
         table {
             width: 100%;
             max-width: 800px;
