@@ -1,4 +1,12 @@
 <?php
+session_start(); // Start the session
+
+// Check if the user is logged in
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header('Location: login.php'); // Redirect to login page
+    exit();
+}
+
 include 'db_connect.php';
 
 $userId = $_GET['id'] ?? '';

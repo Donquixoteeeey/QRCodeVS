@@ -199,75 +199,76 @@
         });
 
         document.addEventListener("DOMContentLoaded", function () {
-            const savedUsername = getCookie("username");
-            const savedPassword = getCookie("password");
-            
-            if (savedUsername) {
-                username.value = savedUsername;
-                document.getElementById('rememberMe').checked = true; 
-            }
-            if (savedPassword) {
-                password.value = savedPassword;
-            }
-        });
-        
-        function checkLogin(event) {
-            event.preventDefault();
-            
-            const usernameValue = username.value;
-            const passwordValue = password.value;
-            const rememberMe = document.getElementById('rememberMe').checked;
-            
-            if (rememberMe) {
-                setCookie("username", usernameValue, 7); 
-                setCookie("password", passwordValue, 7);
-            } else {
-                deleteCookie("username"); 
-                deleteCookie("password"); 
-            }
-            
-            fetch('admin_login.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username: usernameValue, password: passwordValue }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = data.redirect;
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        }
-        
-        function setCookie(name, value, days) {
-            const date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
-        }
-        
-        function getCookie(name) {
-            const nameEQ = name + "=";
-            const ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        }
-        
-        function deleteCookie(name) {
-            document.cookie = name + '=; Max-Age=-99999999;';
-        }
+  
+    const savedUsername = getCookie("username");
+    const savedPassword = getCookie("password");
+    
+    if (savedUsername) {
+        document.getElementById('username').value = savedUsername;
+        document.getElementById('rememberMe').checked = true; 
+    }
+    if (savedPassword) {
+        document.getElementById('password').value = savedPassword;
+    }
+});
 
-    </script>
+function checkLogin(event) {
+    event.preventDefault(); // Prevent form submission
+
+    const usernameValue = document.getElementById('username').value; 
+    const passwordValue = document.getElementById('password').value; 
+    const rememberMe = document.getElementById('rememberMe').checked; 
+
+    if (rememberMe) {
+        setCookie("username", usernameValue, 7); 
+        setCookie("password", passwordValue, 7); 
+    } else {
+        deleteCookie("username"); 
+        deleteCookie("password"); 
+    }
+
+   
+    fetch('admin_login.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: usernameValue, password: passwordValue }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = data.redirect; 
+        } else {
+            alert(data.message); 
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+}
+
+function deleteCookie(name) {
+    document.cookie = `${name}=; Max-Age=-99999999; path=/`; 
+}
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null; 
+}
+</script>
 
 </body>
 

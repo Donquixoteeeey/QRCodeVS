@@ -1,3 +1,12 @@
+<?php
+session_start(); // Start the session
+
+// Check if the user is logged in
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header('Location: login.php'); // Redirect to login page
+    exit();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -437,7 +446,7 @@
         <a href="user_info.php"><i class="fas fa-users"></i> User Information</a>
         <a href="qr_code_management.php" ><i class="fas fa-qrcode"></i> QR Code Management</a>
         <a href="activity_logs.php"><i class="fas fa-clipboard-list"></i> Activity Logs</a>
-        <a href="login.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
     <div class="header-icons">
