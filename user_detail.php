@@ -76,7 +76,7 @@ if ($userId) {
             align-items: center;
             padding: 12px 24px;
             margin-bottom: 20px;
-            background-color: #007bff;
+            background-color: #2C2B6D;
             color: #fff;
             text-decoration: none;
             border-radius: 20px;
@@ -89,7 +89,7 @@ if ($userId) {
         }
 
         .back-button i {
-            margin-right: 8px;
+            margin-right: 10px;
         }
 
         .content {
@@ -149,7 +149,7 @@ if ($userId) {
         .action-button {
             padding: 10px 20px;
             margin: 0 10px;
-            background-color: #007bff;
+            background-color: #2C2B6D;
             color: white;
             border: none;
             border-radius: 15px;

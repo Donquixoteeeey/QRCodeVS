@@ -31,27 +31,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($name_err) && empty($vehicle_err) && empty($plate_number_err) && empty($contact_number_err)) {
         
-        $sql = "INSERT INTO user_info (name, vehicle, plate_number, contact_number, registration_date) VALUES (?, ?, ?, ?, NOW())";
-
+        // Check if the plate number already exists
+        $sql = "SELECT id FROM user_info WHERE plate_number = ?";
         if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("ssss", $param_name, $param_vehicle, $param_plate_number, $param_contact_number);
-
-            $param_name = $name;
-            $param_vehicle = $vehicle;
+            $stmt->bind_param("s", $param_plate_number);
             $param_plate_number = $plate_number;
-            $param_contact_number = $contact_number;
 
-            if ($stmt->execute()) {
-                header("location: user_info.php");
-                exit();
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows > 0) {
+                $plate_number_err = "This plate number is already registered.";
             } else {
-                echo "Something went wrong. Please try again later.";
-            }
+                // Plate number is unique, insert the new record
+                $sql = "INSERT INTO user_info (name, vehicle, plate_number, contact_number, registration_date) VALUES (?, ?, ?, ?, NOW())";
+                if ($stmt = $conn->prepare($sql)) {
+                    $stmt->bind_param("ssss", $param_name, $param_vehicle, $param_plate_number, $param_contact_number);
 
+                    $param_name = $name;
+                    $param_vehicle = $vehicle;
+                    $param_plate_number = $plate_number;
+                    $param_contact_number = $contact_number;
+
+                    if ($stmt->execute()) {
+                        header("location: user_info.php");
+                        exit();
+                    } else {
+                        echo "Something went wrong. Please try again later.";
+                    }
+                }
+            }
             $stmt->close();
         }
     }
-
     $conn->close();
 }
 ?>

@@ -405,11 +405,19 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 .table-scroll-container {
     max-height: 300px; 
     overflow-y: auto; 
-    border: 1px solid #ddd; 
+    overflow-x: hidden; /* Hide horizontal scrollbar if needed */
     border-radius: 10px; 
     margin-top: 10px;
 }
+.table-scroll-container::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: to ensure no background shows */
+}
 
+/* Hide scrollbar for Firefox */
+.table-scroll-container {
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
 .all-registered-users-table {
     width: 100%;
     border-collapse: collapse; 
@@ -427,7 +435,15 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     background-color: #2C2B6D; 
     color: #f1f1f1; 
     z-index: 10;
+    
 }
+
+.all-registered-users-table tbody tr:hover {
+    background-color: #f0f0f0;
+    cursor: pointer; 
+    border-radius: 0;
+}
+
 
 
     </style>
