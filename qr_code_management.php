@@ -6,7 +6,41 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header('Location: login.php'); // Redirect to login page
     exit();
 }
+
+// Initialize the database connection
+$mysqli = new mysqli("localhost", "root", "", "qr_code_management");
+
+// Check the connection
+if ($mysqli->connect_error) {
+    die("Connection failed: " . $mysqli->connect_error);
+}
+
+// Query for users who have generated a QR code (qr_code_generated_at IS NOT NULL)
+$query_with_qr_code = "SELECT id, name, vehicle, plate_number FROM user_info WHERE qr_code_generated_at IS NOT NULL";
+$result_with_qr_code = $mysqli->query($query_with_qr_code);
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "qr_code_management";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Now you can run your query, like:
+$sql = "SELECT * FROM user_info WHERE qr_code_generated_at IS NOT NULL";
+$result_with_qr_code = $conn->query($sql);
+
+// Continue with your code
+
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -425,6 +459,122 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             margin: 30px 20px; 
         }
 
+        .table-container {
+            text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin-top: 30px;
+    height: 500px;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.table-container h2{
+    margin: 0 0 20px;
+            font-size: 30px;
+            color: #000522;
+            font-family: 'Comfortaa', cursive;
+            margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 10px;
+}
+
+thead th {
+    background-color: #2C2B6D;
+    color: #f1f1f1;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+tbody {
+    display: block;
+    height: 320px;
+    overflow-y: auto;
+}
+
+tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+td, th {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    width: 20%;
+}
+
+thead th:first-child {
+    border-top-left-radius: 15px;
+}
+
+thead th:last-child {
+    border-top-right-radius: 15px;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+form input[type="text"] {
+    padding: 5px;
+    width: 30%;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 15px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    font-family: Inter, sans-serif;
+}
+
+form input[type="text"] :focus {
+    border: 1px solid #2C2B6D;
+}
+
+form button {
+    padding: 10px 15px;
+    background-color: #2C2B6D;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+button[type="submit"] {
+    padding: 5px 20px;
+    background-color: #2C2B6D;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-left: 10px;
+    font-family: Inter, sans-serif;
+    margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+
     </style>
 
 </head>
@@ -475,10 +625,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             }
             ?>
         </div>
-        <div class="button-container">
-            <button onclick="downloadQRCode()">Download</button>
-            <button onclick="printQRCode()">Print</button>
-        </div>
+        
     </div>
 
     <div id="userModal" class="modal">
@@ -487,9 +634,79 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             <ul id="userList"></ul>
         </div>
     </div>
+
+    <div class="table-container">
+    <h2>Print QR Codes</h2>
+    <!-- Search form -->
+    <form method="GET" action="">
+        <input type="text" name="search" placeholder="Search by name, vehicle, or plate number" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+        <button type="submit">Search</button>
+    </form>
+
+    <form action="process_selection.php" method="POST">
+        <table>
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Name</th>
+                    <th>Vehicle</th>
+                    <th>Plate Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Get the search query if it's set
+                $search = isset($_GET['search']) ? $_GET['search'] : '';
+
+                // Update your query to filter based on the search term
+                $sql = "SELECT * FROM user_info WHERE qr_code_generated_at IS NOT NULL";
+                if (!empty($search)) {
+                    $sql .= " AND (name LIKE '%$search%' OR vehicle LIKE '%$search%' OR plate_number LIKE '%$search%')";
+                }
+                $result_with_qr_code = $conn->query($sql);
+
+                if ($result_with_qr_code->num_rows > 0) {
+                    while ($row = $result_with_qr_code->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td><input type='checkbox' name='selected_users[]' value='" . $row['id'] . "'></td>";
+                        echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['vehicle']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['plate_number']) . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='4'>No users with QR codes found.</td></tr>";
+                }
+                ?>
+                
+            </tbody>
+        </table>
+        <button type="submit">Print</button>
+    </form>
+</div>
+
+<div style="height: 40px;"></div>
+
+</div>
+
+
 </div>
 
     <script>
+        function searchTable() {
+    let searchTerm = document.getElementById('searchInput').value;
+
+    // Use AJAX to send the search term and fetch results
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', 'qr_code_management.php?search=' + searchTerm, true); // Pass the search term in the query string
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById('tableBody').innerHTML = xhr.responseText; // Update the table body with the response
+        }
+    };
+    xhr.send();
+}
+    
 
         function toggleSidebar() {
             document.body.classList.toggle('collapsed');
@@ -589,6 +806,23 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 alert('No QR code available to print.');
             }
         }
+
+        function printSelectedQRCodes() {
+    const qrCodesDiv = document.querySelector('.qr-codes-to-print');
+    
+    if (qrCodesDiv) {
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>Print Selected QR Codes</title></head><body>');
+        printWindow.document.write(qrCodesDiv.innerHTML);
+        printWindow.document.write('</body></html>');
+
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+    } else {
+        alert('No QR codes available to print.');
+    }
+}
 
     </script>
 
