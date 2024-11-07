@@ -19,7 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $data['username'] ?? null;
     $password = $data['password'] ?? null;
 
-    $query = "SELECT username, password FROM admins WHERE username = ?";
+    // Make the username comparison case-sensitive
+    $query = "SELECT username, password FROM admins WHERE BINARY username = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -46,4 +47,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
     exit; // Stop further execution after handling the AJAX request
 }
-
+?>
