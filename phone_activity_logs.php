@@ -208,6 +208,9 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
 <body>
 
+ <!-- Add this audio element for the beep sound -->
+ <audio id="beepSound" src="sound/beep-104060.mp3"></audio>
+
     <div class="header-icons">
         <div class="admin-profile">A
             <div class="dropdown">
@@ -257,6 +260,9 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             dateDisplay.textContent = today.toLocaleDateString('en-US', options);
         });
 
+        // Initialize the beep sound
+        const beepSound = document.getElementById('beepSound');
+
         const timeLogs = {};
         let isProcessing = false;
 
@@ -294,70 +300,77 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         }
 
         function logTime(qrCodeText) {
-            if (isProcessing) return;
-            isProcessing = true;
+    if (isProcessing) return;
+    isProcessing = true;
 
-            fetch('validate_qr_code.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ qr_code_text: qrCodeText })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const userId = data.user.id;
-                    const userName = data.user.name;
-                    const vehicle = data.user.vehicle;
-                    const plateNumber = data.user.plate_number;
-                    const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    fetch('validate_qr_code.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ qr_code_text: qrCodeText })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const userId = data.user.id;
+            const userName = data.user.name;
+            const vehicle = data.user.vehicle;
+            const plateNumber = data.user.plate_number;
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            if (!timeLogs[userId]) {
+                timeLogs[userId] = [];
+            }
+            
+            const lastLog = timeLogs[userId][timeLogs[userId].length - 1];
+            
+            if (!lastLog || lastLog.timeOut) {
+                // Time-in action
+                const newLog = { timeIn: currentTime, timeOut: null };
+                timeLogs[userId].push(newLog);
+                
+                output.textContent = `User ${userName} logged in at ${currentTime}`;
+                
+                fetch('store_time.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: userId, timeIn: currentTime })
+                });
+
+                // Play beep sound for time-in
+                beepSound.play();
+            
+            } else {
+                // Time-out action
+                if (lastLog && lastLog.timeOut === null) {
+                    lastLog.timeOut = currentTime;
                     
-                    if (!timeLogs[userId]) {
-                        timeLogs[userId] = [];
-                    }
+                    output.textContent = `User ${userName} logged out at ${currentTime}`;
                     
-                    const lastLog = timeLogs[userId][timeLogs[userId].length - 1];
-                    
-                    if (!lastLog || lastLog.timeOut) {
-                        const newLog = { timeIn: currentTime, timeOut: null };
-                        timeLogs[userId].push(newLog);
-                        
-                        output.textContent = `User ${userName} logged in at ${currentTime}`;
-                        
-                        fetch('store_time.php', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ userId: userId, timeIn: currentTime })
-                        });
-                    
-                    } else {
-                        
-                        if (lastLog && lastLog.timeOut === null) {
-                            lastLog.timeOut = currentTime;
-                            
-                            output.textContent = `User ${userName} logged out at ${currentTime}`;
-                            
-                            fetch('store_time.php', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ userId: userId, timeOut: currentTime })
-                            });
-                        }
-                    }
-                    
-                    setTimeout(() => {
-                        isProcessing = false;  
-                        }, 3000);
-                    } else {
-                        output.textContent = "Invalid QR code. Please try again.";
-                        isProcessing = false;  
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    output.textContent = "Error processing QR code. Please try again.";
-                    isProcessing = false; 
+                    fetch('store_time.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userId: userId, timeOut: currentTime })
                     });
+
+                    // Play beep sound for time-out
+                    beepSound.play();
                 }
+            }
+            
+            setTimeout(() => {
+                isProcessing = false;  
+                }, 3000);
+            } else {
+                output.textContent = "Invalid QR code. Please try again.";
+                isProcessing = false;  
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            output.textContent = "Error processing QR code. Please try again.";
+            isProcessing = false; 
+        });
+}
 
     </script>
 

@@ -514,7 +514,7 @@ label {
 }
 
 .generate-report-btn {
-    width: 14%;
+    width: 150px;
     padding: 7px;
     background-color: #2C2B6D;
     color: white;
@@ -522,7 +522,8 @@ label {
     border-radius: 15px;
     cursor: pointer;
     font-size: 15px;
-    margin-left: 15px;
+    margin-left: 12px;
+    margin-right: 250px;
 }
 
 .generate-report-btn:hover {
@@ -566,6 +567,27 @@ label {
     cursor: pointer;
 }
 
+
+.export-dropdown, .export-btn, .print-btn {
+    width: 140px;
+    padding: 5px;
+    font-size: 15px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    margin-left: 10px;
+}
+
+.export-btn, .print-btn {
+    background-color: #2C2B6D;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+.export-btn:hover, .print-btn:hover {
+    background-color: #0056b3;
+}
 
     </style>
 
@@ -691,11 +713,19 @@ label {
     <label for="end-date">End Date:</label>
     <input type="date" id="end-date" class="date-input">
     
+    <!-- Generate Report Button -->
     <button onclick="generateReport()" class="generate-report-btn">Generate Report</button>
-    <button onclick="printReport(document.getElementById('start-date').value, document.getElementById('end-date').value)" class="generate-report-btn">Print Report</button>
-
-
     
+    <!-- Export Dropdown and Buttons for Export/Print -->
+    <label for="export-format" class="export-label">Export Report as:</label>
+    <select id="export-format" class="export-dropdown">
+        <option value="pdf">PDF</option>
+        <option value="csv">CSV</option>
+    </select>
+    
+    <button onclick="handleExport()" class="export-btn">Export</button>
+    <button onclick="printReport(document.getElementById('start-date').value, document.getElementById('end-date').value)" class="print-btn">Print Report</button>
+
     <!-- Table to display the report data -->
     <div id="report-results">
         <table id="report-table" style="display: none;">
@@ -719,7 +749,142 @@ label {
 
 
 <div style="height: 40px;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
 <script>
+   function generateReport() {
+    // Logic to generate the report (retrieve data and display it in the table)
+    console.log("Report generated!");
+    // Show the report table after generating the report
+    document.getElementById("report-table").style.display = "table";
+}
+
+function generateReport() {
+    // Logic to generate the report (retrieve data and display it in the table)
+    console.log("Report generated!");
+    // Show the report table after generating the report
+    document.getElementById("report-table").style.display = "table";
+}
+
+function handleExport() {
+    var selectedFormat = document.getElementById('export-format').value;
+    var startDate = document.getElementById('start-date').value || 'Not_specified';
+    var endDate = document.getElementById('end-date').value || 'Not_specified';
+
+    if (selectedFormat === 'pdf') {
+        exportToPDF();  // Call your existing function to generate PDF
+    } else if (selectedFormat === 'csv') {
+        exportToCSV(startDate, endDate);  // Call the updated export function with date range
+    }
+}
+
+function exportToCSV(startDate, endDate) {
+    var table = document.getElementById('report-table');
+    var rows = table.getElementsByTagName('tr');
+    var csvContent = '';
+
+    // Loop through the rows and extract text to CSV
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        var cols = row.getElementsByTagName('td');
+        var rowData = [];
+
+        // Loop through columns to get cell text
+        for (var j = 0; j < cols.length; j++) {
+            rowData.push(cols[j].textContent || cols[j].innerText);
+        }
+
+        csvContent += rowData.join(',') + '\n'; // Add row to CSV content
+    }
+
+    // Generate the filename with date range
+    var filename = 'activity_report_' + startDate + '_to_' + endDate + '.csv';
+
+    // Trigger CSV file download
+    var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename; // Set the filename to include the date range
+    link.click();
+}
+
+
+function exportToPDF() {
+    try {
+        // Check if jsPDF and autoTable are loaded
+        if (!window.jspdf || !window.jspdf.jsPDF) {
+            throw new Error("jsPDF library is not loaded.");
+        }
+
+        const { jsPDF } = window.jspdf;
+        let pdf = new jsPDF('p', 'pt', 'a4');
+
+        // Define image logo and text
+        let logoUrl = 'img/CPC%20LOGO%20BACKROUND%20REMOVED.png';
+        let logoWidth = 100; // Set width of the logo
+        let logoHeight = 100; // Set height of the logo
+        let text = "COLEGIO DE LA PURISIMA CONCEPCION";
+
+        // Center the logo
+        let pageWidth = pdf.internal.pageSize.width;
+        let logoX = (pageWidth - logoWidth) / 2; // Calculate X to center the logo
+
+        // Add the logo image (centered)
+        pdf.addImage(logoUrl, 'PNG', logoX, 60, logoWidth, logoHeight);
+
+        // Add the text below the logo, centered
+        pdf.setFontSize(12);
+        let textWidth = pdf.getTextWidth(text); // Get the width of the text
+        let textX = (pageWidth - textWidth) / 2; // Calculate X to center the text
+        pdf.text(text, textX, 180); // Y position is below the logo
+
+        // Add title "ACTIVITY REPORT" and date range below the "COLEGIO" text
+        pdf.setFontSize(18);
+        let reportTitle = "ACTIVITY REPORT";
+        let reportTitleWidth = pdf.getTextWidth(reportTitle); // Get width of the title
+        let reportTitleX = (pageWidth - reportTitleWidth) / 2; // Center the title
+        pdf.text(reportTitle, reportTitleX, 220); // Positioning the title
+
+        // Add the date range below the title
+        let startDate = document.getElementById('start-date').value || 'Not specified';
+        let endDate = document.getElementById('end-date').value || 'Not specified';
+        pdf.setFontSize(12);
+        let dateRange = "Date Range: " + startDate + ' to ' + endDate;
+        let dateRangeWidth = pdf.getTextWidth(dateRange); // Get width of the date range text
+        let dateRangeX = (pageWidth - dateRangeWidth) / 2; // Center the date range
+        pdf.text(dateRange, dateRangeX, 250); // Positioning the date range
+
+        // Use autoTable to render the table with custom styles
+        pdf.autoTable({
+            html: '#report-table',
+            startY: 280, // Starting point for the table (below the date range)
+            theme: 'grid', // Grid theme for the table
+            headStyles: {
+                fillColor: [44, 43, 109], // Same color as header
+                textColor: 255,
+                fontSize: 10,
+                fontStyle: 'bold'
+            },
+            styles: {
+                fontSize: 10,
+                cellPadding: 5,
+                lineWidth: 0.5,
+                lineColor: [0, 0, 0], // Border color
+                textColor: [0, 0, 0] // Text color
+            },
+            margin: { top: 280 }, // Set margin top to leave space for title, logo, and date range
+        });
+
+        // Save the PDF with the same styling as the printed report
+        pdf.save("activity_report.pdf");
+
+    } catch (error) {
+        console.error("Error generating PDF:", error);
+        alert("An error occurred while generating the PDF. Check the console for more details.");
+    }
+}
+
 function printReport(startDate, endDate) {
     startDate = startDate || 'Not specified';
     endDate = endDate || 'Not specified';
