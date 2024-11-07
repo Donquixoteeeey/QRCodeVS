@@ -461,58 +461,68 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     border-radius: 0;
 }
 
+/* Container for report generation */
 .report-generation-container {
-    width: 97%; 
-    margin-top: 10px; 
-    background-color: #fff; 
-    border-radius: 15px; 
-    padding: 20px; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+    width: 97%;
+    margin-top: 10px;
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
 
+/* Container for report generation */
+.report-generation-container {
+    width: 97%;
+    margin-top: 10px;
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Heading for report generation section */
 .report-generation-container h2 {
-    font-family: 'Comfortaa', cursive; 
-    color: #2C2B6D; 
-    margin-bottom: 20px; 
+    font-family: 'Comfortaa', cursive;
+    color: #2C2B6D;
+    margin-bottom: 20px;
     margin-top: 10px;
     font-size: 22px;
 }
 
+/* Date Picker container (aligned on one line) */
 .date-picker-container {
+    display: flex;
+    align-items: center; /* Align vertically */
+    gap: 10px; /* Space between elements */
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
+/* Label styling */
 .date-picker-container label {
-    margin: 20px 0 5px; /* Increase margin-top for more space above the input fields */
-    display: block;
     font-family: 'Inter', sans-serif;
-    
     color: #333;
-}
-
-label {
-    font-family: 'Inter', sans-serif;
     font-size: 16px;
-    color: #2C2B6D; /* You can adjust the color as needed */
-    margin-bottom: 5px;
-    margin-left: 15px;
+    margin-bottom: 0;
+    margin-left: 10px; /* Added spacing to align with input */
 }
 
-
-
+/* Date input field styling */
 .date-input {
     width: 20%;
     padding: 5px;
     font-size: 15px;
     border-radius: 15px;
     border: 1px solid #ccc;
-    margin-bottom: 20px;
-    margin-left: 10px;
+    margin-bottom: 0;
     font-family: Inter, sans-serif;
+    margin-left: 10px;
 }
 
+/* Styling for generate report button */
 .generate-report-btn {
     width: 150px;
     padding: 7px;
@@ -522,14 +532,48 @@ label {
     border-radius: 15px;
     cursor: pointer;
     font-size: 15px;
-    margin-left: 12px;
-    margin-right: 250px;
+    margin-left: 10px;
 }
 
 .generate-report-btn:hover {
     background-color: #0056b3;
 }
 
+/* Export and Print buttons container */
+.export-print-container {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 20px;
+    margin-left: 10px; /* Added spacing to align with input */
+}
+
+
+
+/* Styling for Export and Print buttons */
+.export-dropdown, .export-btn, .print-btn {
+    width: 140px;
+    padding: 5px;
+    font-size: 15px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    margin-left: 10px;
+}
+
+.export-btn, .print-btn {
+    background-color: #2C2B6D;
+    color: white;
+    cursor: pointer;
+}
+
+.export-btn:hover, .print-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Styling for report table */
 #report-table {
     width: 100%;
     border-collapse: collapse;
@@ -567,27 +611,6 @@ label {
     cursor: pointer;
 }
 
-
-.export-dropdown, .export-btn, .print-btn {
-    width: 140px;
-    padding: 5px;
-    font-size: 15px;
-    border-radius: 15px;
-    border: 1px solid #ccc;
-    margin-left: 10px;
-}
-
-.export-btn, .print-btn {
-    background-color: #2C2B6D;
-    color: white;
-    cursor: pointer;
-    margin-left: 10px;
-    margin-bottom: 20px;
-}
-
-.export-btn:hover, .print-btn:hover {
-    background-color: #0056b3;
-}
 
     </style>
 
@@ -703,48 +726,52 @@ label {
         </table>
     </div>
 </div>
-
+<!-- Report Generation Container -->
 <div class="report-generation-container">
-    <h2>Generate Activity Report</h2>
+    <h2>Generate Report</h2>
     
-    <label for="start-date">Start Date:</label>
-    <input type="date" id="start-date" class="date-input">
+    <!-- Date Picker Container (now in the same line) -->
+    <div class="date-picker-container">
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="start-date" class="date-input" name="start-date">
+        
+        <label for="end-date">End Date:</label>
+        <input type="date" id="end-date" class="date-input" name="end-date">
+        
+        <!-- Generate Report Button -->
+        <button class="generate-report-btn" onclick="generateReport()">Generate Report</button>
+    </div>
     
-    <label for="end-date">End Date:</label>
-    <input type="date" id="end-date" class="date-input">
+    <!-- Export and Print buttons -->
+    <div class="export-print-container">
+        <label for="export-format">Select Export Format:</label>
+        <select id="export-format" class="export-dropdown">
+            <option value="pdf">PDF</option>
+            <option value="csv">CSV</option>
+        </select>
+        
+        <button class="export-btn" onclick="handleExport()">Export</button>
+        <button class="print-btn" onclick="printReport()">Print</button>
+    </div>
     
-    <!-- Generate Report Button -->
-    <button onclick="generateReport()" class="generate-report-btn">Generate Report</button>
-    
-    <!-- Export Dropdown and Buttons for Export/Print -->
-    <label for="export-format" class="export-label">Export Report as:</label>
-    <select id="export-format" class="export-dropdown">
-        <option value="pdf">PDF</option>
-        <option value="csv">CSV</option>
-    </select>
-    
-    <button onclick="handleExport()" class="export-btn">Export</button>
-    <button onclick="printReport(document.getElementById('start-date').value, document.getElementById('end-date').value)" class="print-btn">Print Report</button>
-
-    <!-- Table to display the report data -->
-    <div id="report-results">
-        <table id="report-table" style="display: none;">
+    <!-- Report Table -->
+    <div class="report-container">
+        <table id="report-table" style="display:none;">
             <thead>
                 <tr>
                     <th>User ID</th>
                     <th>Name</th>
                     <th>Vehicle</th>
                     <th>Plate Number</th>
-                    <th>Date/Time</th>
+                    <th>Time</th>
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody id="report-table-body">
-                <!-- Data rows will be dynamically added here -->
-            </tbody>
+            <tbody id="report-table-body"></tbody>
         </table>
     </div>
 </div>
+
 
 
 
