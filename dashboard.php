@@ -348,6 +348,23 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
         margin-bottom: 20px;
     }
+
+    .report-generation-container{
+        width: 97%; 
+        margin-top: 10px; 
+        background-color: #fff; 
+        border-radius: 15px; 
+        padding: 20px; 
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+        margin-bottom: 20px;
+    }
+    .report-generation-container h2{
+        font-family: 'Comfortaa', cursive; 
+        color: #2C2B6D; 
+        margin-bottom: 25px; 
+        margin-top: 10px;
+        font-size: 22px;
+    }
     
     .table-container h2 {
         font-family: 'Comfortaa', cursive; 
@@ -444,6 +461,110 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     border-radius: 0;
 }
 
+.report-generation-container {
+    width: 97%; 
+    margin-top: 10px; 
+    background-color: #fff; 
+    border-radius: 15px; 
+    padding: 20px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+    margin-bottom: 20px;
+}
+
+.report-generation-container h2 {
+    font-family: 'Comfortaa', cursive; 
+    color: #2C2B6D; 
+    margin-bottom: 20px; 
+    margin-top: 10px;
+    font-size: 22px;
+}
+
+.date-picker-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.date-picker-container label {
+    margin: 20px 0 5px; /* Increase margin-top for more space above the input fields */
+    display: block;
+    font-family: 'Inter', sans-serif;
+    
+    color: #333;
+}
+
+label {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #2C2B6D; /* You can adjust the color as needed */
+    margin-bottom: 5px;
+    margin-left: 15px;
+}
+
+
+
+.date-input {
+    width: 20%;
+    padding: 5px;
+    font-size: 15px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    font-family: Inter, sans-serif;
+}
+
+.generate-report-btn {
+    width: 14%;
+    padding: 7px;
+    background-color: #2C2B6D;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-left: 15px;
+}
+
+.generate-report-btn:hover {
+    background-color: #0056b3;
+}
+
+#report-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#report-table th, #report-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+#report-table th {
+    background-color: #2c2b6d;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#report-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+#report-table tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+#report-table tbody tr:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+}
 
 
     </style>
@@ -561,11 +682,138 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     </div>
 </div>
 
+<div class="report-generation-container">
+    <h2>Generate Activity Report</h2>
+    
+    <label for="start-date">Start Date:</label>
+    <input type="date" id="start-date" class="date-input">
+    
+    <label for="end-date">End Date:</label>
+    <input type="date" id="end-date" class="date-input">
+    
+    <button onclick="generateReport()" class="generate-report-btn">Generate Report</button>
+    <button onclick="printReport(document.getElementById('start-date').value, document.getElementById('end-date').value)" class="generate-report-btn">Print Report</button>
+
+
+    
+    <!-- Table to display the report data -->
+    <div id="report-results">
+        <table id="report-table" style="display: none;">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Vehicle</th>
+                    <th>Plate Number</th>
+                    <th>Date/Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="report-table-body">
+                <!-- Data rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
 
 
 <div style="height: 40px;"></div>
 <script>
+function printReport(startDate, endDate) {
+    startDate = startDate || 'Not specified';
+    endDate = endDate || 'Not specified';
+
+    var reportTable = document.getElementById("report-table");
+
+    var printWindow = window.open('', '', 'height=600,width=800');
+
+    printWindow.document.write('<html><head><title>Activity Report</title>');
+    printWindow.document.write('<style> body { font-family: Inter, sans-serif; padding: 20px; } table { width: 100%; border-collapse: collapse; } th, td { padding: 10px; border: 1px solid #ddd; text-align: left; } th { background-color: #2C2B6D; color: white; } h2 { font-weight: 300; margin-top: 20px; }</style></head><body>');
     
+    // Create a container for the logo and text
+    printWindow.document.write('<div style="text-align: center;">');
+    printWindow.document.write('<img src="img/CPC%20LOGO%20BACKROUND%20REMOVED.png" alt="Report Image" style="width: 100px; height: 100px;">');
+    printWindow.document.write('<p><strong>COLEGIO DE LA PURISIMA CONCEPCION</strong></p>');  // Added text under the logo
+    printWindow.document.write('<h2><strong>ACTIVITY REPORT</strong></h2>');  // Added margin-top to the h2 for spacing
+    
+    printWindow.document.write('</div>');
+    
+    // Date range line
+    printWindow.document.write('<p><strong>Date Range:</strong> ' + startDate + ' to ' + endDate + '</p>');
+
+    printWindow.document.write(reportTable.outerHTML);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+}
+
+
+
+    function generateReport() {
+    const startDate = document.getElementById('start-date').value;
+    const endDate = document.getElementById('end-date').value;
+
+    if (!startDate || !endDate) {
+        alert("Please select both start and end dates.");
+        return;
+    }
+
+    if (new Date(startDate) > new Date(endDate)) {
+        alert("Start date cannot be later than end date.");
+        return;
+    }
+
+    // Send AJAX request to fetch data from PHP
+    fetch('generate_report.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ start_date: startDate, end_date: endDate })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);  // Log the response to check the returned data
+        const reportTable = document.getElementById('report-table');
+        const reportTableBody = document.getElementById('report-table-body');
+
+        // Clear existing table data
+        reportTableBody.innerHTML = '';
+
+        if (data.error) {
+            // Display error message
+            reportTableBody.innerHTML = `<tr><td colspan="6">${data.error}</td></tr>`;
+            reportTable.style.display = 'table';
+        } else if (data.length > 0) {
+            // Populate the table with new data
+            data.forEach(row => {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${row.user_id}</td>
+                    <td>${row.name}</td>
+                    <td>${row.vehicle}</td>
+                    <td>${row.plate_number}</td>
+                    <td>${row.time_timestamp}</td>
+                    <td>${row.action_type}</td>
+                `;
+                reportTableBody.appendChild(newRow);
+            });
+
+            // Display the table
+            reportTable.style.display = 'table';
+        } else {
+            // No data found message
+            reportTableBody.innerHTML = '<tr><td colspan="6">No activities found for the selected date range.</td></tr>';
+            reportTable.style.display = 'table';
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching report data:', error);
+        alert("An error occurred while generating the report.");
+    });
+}
+
 
     
 document.addEventListener('DOMContentLoaded', function() {
